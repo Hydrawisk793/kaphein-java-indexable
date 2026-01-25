@@ -1,0 +1,65 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply from: 'publish.gradle'
+apply from: "$rootDir/scripts/publish-local-properties.gradle"
+
+group = PUBLISH_GROUP_ID
+version = PUBLISH_VERSION
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+
+      pom {
+        name = PUBLISH_ARTIFACT_ID
+        description = PUBLISH_DESCRIPTION
+        url = PUBLISH_URL
+
+        licenses {
+          license {
+            name = PUBLISH_LICENSE_NAME
+            url = PUBLISH_LICENSE_URL
+          }
+        }
+
+        developers {
+          developer {
+            id = PUBLISH_DEVELOPER_ID
+            name = PUBLISH_DEVELOPER_NAME
+            email = PUBLISH_DEVELOPER_EMAIL
+          }
+        }
+
+        scm {
+          connection = PUBLISH_SCM_CONNECTION
+          developerConnection = PUBLISH_SCM_DEVELOPER_CONNECTION
+          url = PUBLISH_SCM_URL
+        }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      name = "LocalStaging"
+      url = layout.buildDirectory.dir("central-staging")
+    }
+  }
+
+  signing {
+    if (project.hasProperty('signing.keyId'))
+    {
+      sign publishing.publications.mavenJava
+    }
+  }
+}
+
+task generateCentralBundle(type: Zip) {
+  dependsOn 'publishMavenJavaPublicationToLocalStagingRepository'
+
+  archiveFileName = "${project.name}-${project.version}-bundle.zip"
+  destinationDirectory = layout.buildDirectory.dir("libs")
+
+  from layout.buildDirectory.dir("central-staging")
+}

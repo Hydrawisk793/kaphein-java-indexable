@@ -1,0 +1,6 @@
+rootProject.name = 'kaphein-java-indexable'
+
+include 'kaphein-java-indexable-internal'
+include 'kaphein-java-indexable-core'
+include 'kaphein-java-indexable-arch-unit'
+include 'kaphein-java-indexable-jackson-v2'

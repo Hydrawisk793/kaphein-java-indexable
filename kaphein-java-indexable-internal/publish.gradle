@@ -1,0 +1,6 @@
+apply from: "$rootDir/publish.gradle"
+
+ext {
+  PUBLISH_ARTIFACT_ID = 'kaphein-java-indexable-internal'
+  PUBLISH_DESCRIPTION = ''
+}
