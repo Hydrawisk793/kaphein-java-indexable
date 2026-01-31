@@ -4,13 +4,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Map.Entry;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * A mutable, map-backed implementation of {@link Indexable}.
+ * <p>A mutable, map-backed implementation of {@link Indexable}.</p>
  * 
  * <p>This class is <b>NOT</b> thread-safe.
  * External synchronization is required for concurrent access.</p>
@@ -22,35 +20,18 @@ public class MapBackedObject extends AbstractMapBackedObject
 {
   public static class PropertyDescriptors extends AbstractMapBackedObject.PropertyDescriptors
   {
-    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = Stream
-      .<PropertyDescriptor<?>>of(
-      // Empty.
-      )
-      .collect(Collectors.collectingAndThen(
-        Collectors.toMap(
-          PropertyDescriptor::getIndexKey,
-          Function.identity(),
-          (l, r) -> r,
-          LinkedHashMap::new),
-        Collections::unmodifiableMap));
+    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorHelpers
+      .ownDescriptors(Collections.emptyList());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getOwnDescriptors()
     {
       return OWN_DESC_MAP;
     }
 
-    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = Stream
-      .of(
+    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorHelpers
+      .allDescriptors(
         AbstractMapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
-        getOwnDescriptors().values())
-      .flatMap(Collection::stream)
-      .collect(Collectors.collectingAndThen(
-        Collectors.toMap(
-          PropertyDescriptor::getIndexKey,
-          Function.identity(),
-          (l, r) -> r,
-          LinkedHashMap::new),
-        Collections::unmodifiableMap));
+        getOwnDescriptors().values());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getAllDescriptors()
     {
@@ -111,5 +92,13 @@ public class MapBackedObject extends AbstractMapBackedObject
   public void clear()
   {
     doClear();
+  }
+
+  @Override
+  public MapBackedObject withEntries(
+    final Collection<? extends Entry<? extends String, ? extends Object>> entries
+  )
+  {
+    return (MapBackedObject)super.withEntries(entries);
   }
 }

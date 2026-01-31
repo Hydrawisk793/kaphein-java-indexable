@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -212,6 +213,14 @@ public class IndexableJacksonV2InheritanceTest
     {
       return getByDescriptor(PropertyDescriptors.PROP_URI_NAMED_CLAIM);
     }
+
+    @Override
+    public Bar withEntries(
+      final Collection<? extends Entry<? extends String, ? extends Object>> entries
+    )
+    {
+      return (Bar)super.withEntries(entries);
+    }
   }
 
   private final JsonMapper jsonMapper;
@@ -255,7 +264,9 @@ public class IndexableJacksonV2InheritanceTest
       Pair.of("prop_baz", true),
       Pair.of("prop_qux", 3.14),
       Pair.of("prop_piyo", Arrays.asList("a", "b")),
-      Pair.of("prop_piyo_piyo", MapFactories.fromOrderedEntries(Pair.of("x", 1), Pair.of("y", 2))),
+      Pair.of("prop_piyo_piyo", MapFactories.fromOrderedEntries(
+        Pair.of("x", 1),
+        Pair.of("y", 2))),
       Pair.of("prop_piyo_piyo_piyo", new Foo(1, "2", true)),
       Pair.of("com.example.scheme-01:/segment_1/segment_2/segment_3", "textValue")));
     final String json = jsonMapper.writeValueAsString(input);
@@ -329,7 +340,9 @@ public class IndexableJacksonV2InheritanceTest
       Pair.of("prop_baz", true),
       Pair.of("prop_qux", 3.14),
       Pair.of("prop_piyo", Arrays.asList("a", "b")),
-      Pair.of("prop_piyo_piyo", MapFactories.fromOrderedEntries(Pair.of("x", 1), Pair.of("y", 2))),
+      Pair.of("prop_piyo_piyo", MapFactories.fromOrderedEntries(
+        Pair.of("x", 1),
+        Pair.of("y", 2))),
       Pair.of("prop_piyo_piyo_piyo", new Foo(1, "2", true)),
       Pair.of("com.example.scheme-01:/segment_1/segment_2/segment_3", "textValue")));
 

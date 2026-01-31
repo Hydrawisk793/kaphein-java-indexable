@@ -4,45 +4,26 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Map.Entry;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @IndexableComplient
 public class ImmutableMapBackedObject extends AbstractMapBackedObject
 {
   public static class PropertyDescriptors extends AbstractMapBackedObject.PropertyDescriptors
   {
-    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = Stream
-      .<PropertyDescriptor<?>>of(
-      // Empty.
-      )
-      .collect(Collectors.collectingAndThen(
-        Collectors.toMap(
-          PropertyDescriptor::getIndexKey,
-          Function.identity(),
-          (l, r) -> r,
-          LinkedHashMap::new),
-        Collections::unmodifiableMap));
+    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorHelpers
+      .ownDescriptors(Collections.emptyList());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getOwnDescriptors()
     {
       return OWN_DESC_MAP;
     }
 
-    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = Stream
-      .of(
+    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorHelpers
+      .allDescriptors(
         AbstractMapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
-        getOwnDescriptors().values())
-      .flatMap(Collection::stream)
-      .collect(Collectors.collectingAndThen(
-        Collectors.toMap(
-          PropertyDescriptor::getIndexKey,
-          Function.identity(),
-          (l, r) -> r,
-          LinkedHashMap::new),
-        Collections::unmodifiableMap));
+        getOwnDescriptors().values());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getAllDescriptors()
     {
@@ -90,18 +71,26 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
   @Override
   public Object put(final String key, final Object value)
   {
-    return doPut(key, value);
+    throw new UnsupportedOperationException("'put' is not supported.");
   }
 
   @Override
   public Object remove(final Object key)
   {
-    return doRemove(key);
+    throw new UnsupportedOperationException("'remove' is not supported.");
   }
 
   @Override
   public void clear()
   {
-    doClear();
+    throw new UnsupportedOperationException("'clear' is not supported.");
+  }
+
+  @Override
+  public ImmutableMapBackedObject withEntries(
+    final Collection<? extends Entry<? extends String, ? extends Object>> entries
+  )
+  {
+    return (ImmutableMapBackedObject)super.withEntries(entries);
   }
 }

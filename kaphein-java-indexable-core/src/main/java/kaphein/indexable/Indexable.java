@@ -17,9 +17,9 @@ import kaphein.indexable.internal.AssertArg;
  * 
  * <p>This interface defines {@link java.util.Map}-like operations for accessing object properties
  * by string keys, with additional type-safe access via
- * {@link #getByDescriptor(PropertyDescriptor)}.
+ * {@link #getByDescriptor(PropertyDescriptor)}.</p>
  * 
- * <p>Implementations must support:
+ * <p>Implementations must support:</p>
  * <ul>
  *   <li>Getting/setting properties by string key</li>
  *   <li>Type-safe access via property descriptors</li>
@@ -27,7 +27,7 @@ import kaphein.indexable.internal.AssertArg;
  * </ul>
  * 
  * <p>Implementations are <b>NOT</b> need to be thread-safe. 
- * Using immutable variants is recommended for this case.</p>
+ * Using immutable variants is recommended for thread safety requirements.</p>
  * 
  * <p>See the {@linkplain kaphein.indexable package documentation} for
  * detailed contract explanation and usage examples.</p>
@@ -48,7 +48,10 @@ public interface Indexable
 
   Object get(Object key);
 
-  default Object getOrDefault(final Object key, final Object defaultValue)
+  default Object getOrDefault(
+    final Object key,
+    final Object defaultValue
+  )
   {
     final Object value = get(key);
 
@@ -59,7 +62,10 @@ public interface Indexable
 
   Map<String, Object> getExtraProperties();
 
-  default Object put(final String key, final Object value)
+  default Object put(
+    final String key,
+    final Object value
+  )
   {
     throw new UnsupportedOperationException("'put' is not supported.");
   }
@@ -122,7 +128,7 @@ public interface Indexable
     }
   }
 
-  <R extends Indexable> R withEntries(
+  Indexable withEntries(
     Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   );
 

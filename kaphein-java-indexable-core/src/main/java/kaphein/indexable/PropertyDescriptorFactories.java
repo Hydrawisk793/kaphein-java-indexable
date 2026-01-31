@@ -15,7 +15,7 @@ import java.util.Set;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.collections4.MapUtils;
 
-public class PropertyDescriptorFactories
+public final class PropertyDescriptorFactories
 {
   private PropertyDescriptorFactories()
   {

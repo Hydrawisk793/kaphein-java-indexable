@@ -21,7 +21,9 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
 
   private final PropertySetter<T> setter;
 
-  public PlainPropertyDescriptor(final PropertyDescriptor<T> src)
+  public PlainPropertyDescriptor(
+    final PropertyDescriptor<T> src
+  )
   {
     this(
       AssertArg.isNotNull(src, "src").getPropertyName(),

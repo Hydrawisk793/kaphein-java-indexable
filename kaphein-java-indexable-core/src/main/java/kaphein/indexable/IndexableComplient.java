@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * <p>A marker annotation for classes that comply with the {@code Indexable} contract.</p>
  * 
  * <p>Classes annotated with {@code @IndexableComplient} declare their intent
- * to follow the contract's requirements, including:
+ * to follow the contract's requirements, including:</p>
  * <ul>
  *   <li>Implementing the {@link Indexable} interface</li>
  *   <li>Providing a {@code PropertyDescriptors} inner class</li>
@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
  * </ul>
  * 
  * <p>See the {@linkplain kaphein.indexable package documentation} for
- * detailed contract explanation and usage examples.
+ * detailed contract explanation and usage examples.</p>
  * 
  * @see Indexable
  * @see PropertyDescriptor

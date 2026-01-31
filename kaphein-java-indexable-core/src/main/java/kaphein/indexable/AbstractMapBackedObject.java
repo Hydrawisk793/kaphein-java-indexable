@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import kaphein.indexable.internal.AssertArg;
 
@@ -17,35 +16,18 @@ abstract class AbstractMapBackedObject implements Indexable
 {
   public static class PropertyDescriptors
   {
-    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = Stream
-      .<PropertyDescriptor<?>>of(
-      // Empty.
-      )
-      .collect(Collectors.collectingAndThen(
-        Collectors.toMap(
-          PropertyDescriptor::getIndexKey,
-          Function.identity(),
-          (l, r) -> r,
-          LinkedHashMap::new),
-        Collections::unmodifiableMap));
+    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorHelpers
+      .ownDescriptors(Collections.emptyList());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getOwnDescriptors()
     {
       return OWN_DESC_MAP;
     }
 
-    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = Stream
-      .of(
-        Collections.<PropertyDescriptor<?>>emptyList(),
-        getOwnDescriptors().values())
-      .flatMap(Collection::stream)
-      .collect(Collectors.collectingAndThen(
-        Collectors.toMap(
-          PropertyDescriptor::getIndexKey,
-          Function.identity(),
-          (l, r) -> r,
-          LinkedHashMap::new),
-        Collections::unmodifiableMap));
+    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorHelpers
+      .allDescriptors(
+        Collections.emptyList(),
+        getOwnDescriptors().values());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getAllDescriptors()
     {
@@ -175,14 +157,13 @@ abstract class AbstractMapBackedObject implements Indexable
   }
 
   @Override
-  public <R extends Indexable> R withEntries(
+  public AbstractMapBackedObject withEntries(
     final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   )
   {
     AssertArg.isNotNull(entries, "entries");
 
-    @SuppressWarnings("unchecked")
-    final R result = (R)selfSupplier.get();
+    final AbstractMapBackedObject result = (AbstractMapBackedObject)selfSupplier.get();
     result.putAll(entries);
 
     return result;
