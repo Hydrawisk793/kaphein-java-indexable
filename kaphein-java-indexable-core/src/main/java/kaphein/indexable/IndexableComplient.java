@@ -12,14 +12,19 @@ import java.lang.annotation.Target;
  * <p>Classes annotated with {@code @IndexableComplient} declare their intent
  * to follow the contract's requirements, including:</p>
  * <ul>
- *   <li>Implementing the {@link Indexable} interface</li>
- *   <li>Providing a {@code PropertyDescriptors} inner class</li>
- *   <li>Supporting both known and extra properties</li>
+ *   <li>Getting readable properties by a string key.</li>
+ *   <li>Setting writable properties by a string key.</li>
+ *   <li>Providing a {@code PropertyDescriptors} inner class.</li>
+ *   <li>Distinguishing between known and extra properties.</li>
  * </ul>
  * 
- * <p>See the {@linkplain kaphein.indexable package documentation} for
+ * <p>Implementations are <b>NOT</b> need to be thread-safe. 
+ * Using immutable variants is recommended for thread safety requirements.</p>
+ * 
+ * <p>See the {@link kaphein.indexable} package documentation for
  * detailed contract explanation and usage examples.</p>
  * 
+ * @see kahpein.indexable
  * @see Indexable
  * @see PropertyDescriptor
  */

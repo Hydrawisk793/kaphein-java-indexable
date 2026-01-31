@@ -12,26 +12,15 @@ import java.util.function.Supplier;
 import kaphein.indexable.internal.AssertArg;
 
 /**
- * <p>The core interface for the {@code Indexable} contract, providing essential
- * method definitions for string-indexed property access.</p>
+ * <p>The core interface for the {@code Indexable} contract to make target class {@link IndexableComplient}.</p>
  * 
- * <p>This interface defines {@link java.util.Map}-like operations for accessing object properties
- * by string keys, with additional type-safe access via
- * {@link #getByDescriptor(PropertyDescriptor)}.</p>
+ * <p>This interface defines essential operations for accessing object properties by string keys, 
+ * with additional type-safe access via {@link #getByDescriptor(PropertyDescriptor)}.</p>
  * 
- * <p>Implementations must support:</p>
- * <ul>
- *   <li>Getting/setting properties by string key</li>
- *   <li>Type-safe access via property descriptors</li>
- *   <li>Distinguishing between known and extra properties</li>
- * </ul>
- * 
- * <p>Implementations are <b>NOT</b> need to be thread-safe. 
- * Using immutable variants is recommended for thread safety requirements.</p>
- * 
- * <p>See the {@linkplain kaphein.indexable package documentation} for
+ * <p>See the {@link kaphein.indexable} package documentation for
  * detailed contract explanation and usage examples.</p>
  * 
+ * @see kahpein.indexable
  * @see IndexableComplient
  * @see PropertyDescriptor
  * @see MapBackedObject
