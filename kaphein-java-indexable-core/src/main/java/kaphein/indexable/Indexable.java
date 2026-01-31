@@ -23,7 +23,6 @@ import kaphein.indexable.internal.AssertArg;
  * @see kahpein.indexable
  * @see IndexableComplient
  * @see PropertyDescriptor
- * @see MapBackedObject
  */
 public interface Indexable
 {
@@ -32,6 +31,8 @@ public interface Indexable
   boolean isEmpty();
 
   boolean containsKey(Object key);
+
+  boolean containsValue(Object value);
 
   Object get(Object key);
 
@@ -86,6 +87,8 @@ public interface Indexable
 
   Set<String> keySet();
 
+  Collection<Object> values();
+
   Set<Map.Entry<String, Object>> entrySet();
 
   default void forEach(final BiConsumer<? super String, ? super Object> consumer)
@@ -112,6 +115,40 @@ public interface Indexable
       }
     }
   }
+
+  /**
+   *  <p>Returns a {@link Map} accessor for the {@link Indexable}. (optional)</p>
+   * 
+   *  <p>Unlike {@link toMap} method, this does not create a copied {@link Map}.</p>
+   * 
+   *  @return A {@link Map} accessor for the {@link Indexable}.
+   *  @throws UnsupportedOperationException If the implementation does not support this operation.
+   */
+  default Map<String, Object> asMap()
+  {
+    throw new UnsupportedOperationException("'asMap' is not supported.");
+  }
+
+  /**
+   *  <p>Compares the specified object with this entry for equality.</p>
+   *  <p>The comparison rules are same as the comparison rules of {@link java.util.Map}.</p>
+   *
+   *  @param o An object to be compared.
+   *  @return {@code true} if the specified object is equal to this {@link Indexable}.
+   *  @see java.util.Map#equals
+   */
+  @Override
+  boolean equals(Object o);
+
+  /**
+   *  <p>Returns the hash code value for this {@link Indexable}.</p>
+   *  <p>The generation rules are are same as the generation rules of {@link java.util.Map}.</p>
+   *
+   *  @return The hash code value.
+   *  @see java.util.Map#hashCode
+   */
+  @Override
+  int hashCode();
 
   Indexable withEntries(
     Collection<? extends Map.Entry<? extends String, ? extends Object>> entries

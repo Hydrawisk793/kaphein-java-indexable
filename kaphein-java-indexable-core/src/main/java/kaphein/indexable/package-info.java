@@ -2,10 +2,11 @@
  * <p>Provides string-indexed property access for Java objects.</p>
  * 
  * <h2>Overview</h2>
- * <p>The {@code Indexable} contract enables POJOs to support both:</p>
+ * <p>The {@code Indexable} contract enables POJOs to support:</p>
  * <ul>
- *   <li>Type-safe access to known properties via descriptors</li>
- *   <li>Dynamic access to unknown/extra properties via string keys</li>
+ *   <li>Type-safe access to known properties via descriptors.</li>
+ *   <li>Dynamic access to unknown/extra properties via string keys.</li>
+ *   <li>Non-Java identifier property keys like URIs.</li>
  * </ul>
  * 
  * <h2>Inspiration</h2>
@@ -28,7 +29,8 @@
  *   <li>{@link IndexableComplient} - Marker annotation.</li>
  *   <li>{@link Indexable} - Main contract interface.</li>
  *   <li>{@link PropertyDescriptor} - Property metadata.</li>
- *   <li>{@link MapBackedObject} - A reference implementation.</li>
+ *   <li>{@link MutableMapBackedObject} - A reference implementation for mutable ones.</li>
+ *   <li>{@link ImmutableMapBackedObject} - A reference implementation for immutable ones.</li>
  * </ul>
  * 
  * <h2>Requirements</h2>
@@ -42,14 +44,12 @@
  * </ul>
  * 
  * <h2>{@code equals} and {@code hashCode}</h2>
- * <p>Implementations MAY override {@code equals} and {@code hashCode}, but it is not a mandetory.
- * <br>If overridden, the recommended semantics are {@link java.util.Map}-like equality:</p>
+ * <p>Implementations MUST override {@code equals} and {@code hashCode} with {@link java.util.Map}-like equality semantics:</p>
  * <ul>
  *   <li>Two {@link Indexable} instances are equal if they have the same key-value mappings.</li>
  *   <li>Hash code should be computed from all key-value pairs, similar to {@link Map#hashCode()}.</li>
  *   <li>{@link PropertyDescriptor}s themselves are <b>NOT</b> considered in equality - only the actual property values.</li>
  * </ul>
- * <p>Implementations may choose different equality semantics based on domain requirements.</p>
  * 
  * <h2>Thread safety</h2>
  * <p>Implementations are <b>NOT</b> need to be thread-safe. 

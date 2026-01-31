@@ -17,8 +17,7 @@ This is problematic when the schema of a data class can be changed without any n
 
 1. Represents POJOs that can have extra properties that are not declared in the class definitions.  
 2. Supports properties whose names are not Java identifiers including URI-based names.  
-3. Supports `java.util.Map`-like accesses on POJOs.  
-4. Make POJO classes more be tolerent on sudden schema changes of incoming response data deserializations.  
+3. Make POJO classes more be tolerent on sudden schema changes of incoming response data deserializations.  
 
 ## License
 
