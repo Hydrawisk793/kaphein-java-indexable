@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import kaphein.indexable.Indexable;
 import kaphein.indexable.PropertyDescriptor;
-import kaphein.indexable.MapBackedObject;
+import kaphein.indexable.MutableMapBackedObject;
 import kaphein.indexable.internal.ThrowableExtensions;
 
 // TOOD: [P1] Replace Xxx.getDescriptorByKey(key) static method call with
@@ -248,7 +248,7 @@ public class IndexableDeserializer
 
     if(null == result)
     {
-      result = new MapBackedObject(entries);
+      result = new MutableMapBackedObject(entries);
     }
 
     return result;

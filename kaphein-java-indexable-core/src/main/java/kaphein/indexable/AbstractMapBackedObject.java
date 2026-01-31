@@ -5,14 +5,20 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import kaphein.indexable.internal.AssertArg;
 
+/**
+ *  <p>The basic implementation of {@link MapBackedObject}.</p>
+ * 
+ *  @see MapBackedObject
+ */
 @IndexableComplient
-abstract class AbstractMapBackedObject implements Indexable
+abstract class AbstractMapBackedObject implements MapBackedObject
 {
   public static class PropertyDescriptors
   {
@@ -35,11 +41,109 @@ abstract class AbstractMapBackedObject implements Indexable
     }
   }
 
+  private static final class MapView implements Map<String, Object>
+  {
+    private final AbstractMapBackedObject owner;
+
+    private MapView(final AbstractMapBackedObject owner)
+    {
+      this.owner = AssertArg.isNotNull(owner, "owner");
+    }
+
+    @Override
+    public int size()
+    {
+      return owner.size();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+      return owner.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(final Object key)
+    {
+      return owner.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(final Object value)
+    {
+      // TODO: [P1] Implement this.
+      throw new UnsupportedOperationException("Unimplemented method 'containsValue'");
+    }
+
+    @Override
+    public Object get(final Object key)
+    {
+      return owner.get(key);
+    }
+
+    @Override
+    public Object put(final String key, final Object value)
+    {
+      return owner.put(key, value);
+    }
+
+    @Override
+    public Object remove(final Object key)
+    {
+      return owner.remove(key);
+    }
+
+    @Override
+    public void putAll(final Map<? extends String, ? extends Object> m)
+    {
+      owner.putAll(m);
+    }
+
+    @Override
+    public void clear()
+    {
+      owner.clear();
+    }
+
+    @Override
+    public Set<String> keySet()
+    {
+      return owner.keySet();
+    }
+
+    @Override
+    public Collection<Object> values()
+    {
+      // TODO: [P1] Implement this.
+      throw new UnsupportedOperationException("Unimplemented method 'values'");
+    }
+
+    @Override
+    public Set<Entry<String, Object>> entrySet()
+    {
+      return owner.entrySet();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+      return owner.equals(obj);
+    }
+
+    @Override
+    public int hashCode()
+    {
+      return owner.hashCode();
+    }
+  }
+
   private final Supplier<? extends Indexable> selfSupplier;
 
   private final Map<String, PropertyDescriptor<?>> descMap;
 
   private final Map<String, Object> propMap;
+
+  private final AtomicReference<MapView> mapViewRef;
 
   protected AbstractMapBackedObject(
     final Supplier<? extends Indexable> selfSupplier,
@@ -56,10 +160,11 @@ abstract class AbstractMapBackedObject implements Indexable
         Collectors.toMap(
           PropertyDescriptor::getIndexKey,
           Function.identity(),
-          (l, r) -> r,
+          ChooseTheLastOneOperator.getInstance(),
           LinkedHashMap::new),
         Collections::unmodifiableMap));
     this.propMap = AssertArg.isNotNull(mapSupplier, "mapSupplier").get();
+    this.mapViewRef = new AtomicReference<>();
 
     for(final Map.Entry<? extends String, ? extends Object> entry : entries)
     {
@@ -157,6 +262,25 @@ abstract class AbstractMapBackedObject implements Indexable
   }
 
   @Override
+  public boolean equals(final Object obj)
+  {
+    // TODO: [P1] Implement this.
+    throw new UnsupportedOperationException("'equals' is not implemented yet.");
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return propMap.hashCode();
+  }
+
+  @Override
+  public Map<String, Object> asMap()
+  {
+    return mapViewRef.getAndUpdate(this::createOrGetMapView);
+  }
+
+  @Override
   public AbstractMapBackedObject withEntries(
     final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   )
@@ -189,15 +313,15 @@ abstract class AbstractMapBackedObject implements Indexable
     Object oldValue = null;
     @SuppressWarnings("unchecked")
     final PropertyDescriptor<Object> desc = (PropertyDescriptor<Object>)descMap.get(key);
-    if(null != desc)
+    if(null == desc)
+    {
+      oldValue = propMap.put(key, value);
+    }
+    else
     {
       oldValue = get(key);
 
       desc.getSetter().apply(desc, propMap, value);
-    }
-    else
-    {
-      oldValue = propMap.put(key, value);
     }
 
     return oldValue;
@@ -213,4 +337,8 @@ abstract class AbstractMapBackedObject implements Indexable
     propMap.clear();
   }
 
+  private MapView createOrGetMapView(final MapView mapView)
+  {
+    return ((null == mapView) ? new MapView(this) : mapView);
+  }
 }

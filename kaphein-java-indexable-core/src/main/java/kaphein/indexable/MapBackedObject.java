@@ -1,104 +1,44 @@
 package kaphein.indexable;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Supplier;
 
 /**
- * <p>A mutable, map-backed implementation of {@link Indexable}.</p>
- * 
- * <p>This class is <b>NOT</b> thread-safe.
- * External synchronization is required for concurrent access.</p>
- * 
- * @see ImmutableMapBackedObject
+ *  <p>A sub interface of {@link Indexable} that represents its implementations backed by {@link java.util.Map}.</p>
  */
-@IndexableComplient
-public class MapBackedObject extends AbstractMapBackedObject
+public interface MapBackedObject extends Indexable
 {
-  public static class PropertyDescriptors extends AbstractMapBackedObject.PropertyDescriptors
-  {
-    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorHelpers
-      .ownDescriptors(Collections.emptyList());
+  boolean containsValue(Object value);
 
-    public static Map<String, ? extends PropertyDescriptor<?>> getOwnDescriptors()
-    {
-      return OWN_DESC_MAP;
-    }
+  Collection<Object> values();
 
-    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorHelpers
-      .allDescriptors(
-        AbstractMapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
-        getOwnDescriptors().values());
-
-    public static Map<String, ? extends PropertyDescriptor<?>> getAllDescriptors()
-    {
-      return ALL_DESC_MAP;
-    }
-  }
-
-  public MapBackedObject()
-  {
-    this(Collections.emptyList());
-  }
-
-  public MapBackedObject(
-    final Map<? extends String, ? extends Object> map
-  )
-  {
-    this(map.entrySet());
-  }
-
-  public MapBackedObject(
-    final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
-  )
-  {
-    this(
-      MapBackedObject::new,
-      LinkedHashMap::new,
-      PropertyDescriptors.getAllDescriptors().values(),
-      entries);
-  }
-
-  protected MapBackedObject(
-    final Supplier<? extends Indexable> selfSupplier,
-    final Supplier<Map<String, Object>> mapSupplier,
-    final Collection<? extends PropertyDescriptor<?>> descs,
-    final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
-  )
-  {
-    super(
-      selfSupplier,
-      mapSupplier,
-      descs,
-      entries);
-  }
-
+  /**
+   *  <p>Compares the specified object with this entry for equality.</p>
+   *  <p>The comparison rules are same as the comparison rules of {@link java.util.Map}.</p>
+   *
+   *  @param o An object to be compared.
+   *  @return {@code true} if the specified object is equal to this {@link MapBackedObject}.
+   *  @see java.util.Map#equals
+   */
   @Override
-  public Object put(final String key, final Object value)
-  {
-    return doPut(key, value);
-  }
+  boolean equals(Object o);
 
+  /**
+   *  <p>Returns the hash code value for this {@link MapBackedObject}.</p>
+   *  <p>The generation rules are are same as the generation rules of {@link java.util.Map}.</p>
+   *
+   *  @return The hash code value.
+   *  @see java.util.Map#hashCode
+   */
   @Override
-  public Object remove(final Object key)
-  {
-    return doRemove(key);
-  }
+  int hashCode();
 
-  @Override
-  public void clear()
-  {
-    doClear();
-  }
-
-  @Override
-  public MapBackedObject withEntries(
-    final Collection<? extends Entry<? extends String, ? extends Object>> entries
-  )
-  {
-    return (MapBackedObject)super.withEntries(entries);
-  }
+  /**
+   *  <p>Returns a {@link Map} accessor for the {@link MapBackedObject}.</p>
+   * 
+   *  <p>Unlike {@link MapBackedObject#toMap} method, this does not create a copied {@link Map}.</p>
+   * 
+   *  @return A {@link Map} accessor for the {@link MapBackedObject}.
+   */
+  Map<String, Object> asMap();
 }

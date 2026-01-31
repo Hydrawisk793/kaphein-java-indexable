@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import kaphein.indexable.Indexable;
-import kaphein.indexable.MapBackedObject;
+import kaphein.indexable.MutableMapBackedObject;
 
 public class IndexableJacksonV2BasicTest
 {
@@ -35,7 +35,7 @@ public class IndexableJacksonV2BasicTest
   public void serializeNull()
     throws Exception
   {
-    final MapBackedObject input = null;
+    final MutableMapBackedObject input = null;
     final String json = jsonMapper.writeValueAsString(input);
 
     assertThat(json, equalTo("null"));
@@ -45,7 +45,7 @@ public class IndexableJacksonV2BasicTest
   public void serializeEmpty()
     throws Exception
   {
-    final Indexable input = new MapBackedObject();
+    final Indexable input = new MutableMapBackedObject();
     final String json = jsonMapper.writeValueAsString(input);
 
     assertThat(json, equalTo("{}"));
@@ -55,7 +55,7 @@ public class IndexableJacksonV2BasicTest
   public void serializeNonEmpty()
     throws Exception
   {
-    final Indexable input = new MapBackedObject(Arrays.asList(
+    final Indexable input = new MutableMapBackedObject(Arrays.asList(
       Pair.of("foo", 1),
       Pair.of("bar", true),
       Pair.of("baz", "text")));
@@ -68,7 +68,7 @@ public class IndexableJacksonV2BasicTest
   public void serializeNonEmptyAndSkipNullValues()
     throws Exception
   {
-    final Indexable input = new MapBackedObject(Arrays.asList(
+    final Indexable input = new MutableMapBackedObject(Arrays.asList(
       new AbstractMap.SimpleImmutableEntry<>("foo", 1),
       new AbstractMap.SimpleImmutableEntry<>("bar", null),
       new AbstractMap.SimpleImmutableEntry<>("baz", "text")));
@@ -81,7 +81,7 @@ public class IndexableJacksonV2BasicTest
   public void serializeNonEmptyAndIncludeEmptyStringValues()
     throws Exception
   {
-    final Indexable input = new MapBackedObject(Arrays.asList(
+    final Indexable input = new MutableMapBackedObject(Arrays.asList(
       new AbstractMap.SimpleImmutableEntry<>("foo", 1),
       new AbstractMap.SimpleImmutableEntry<>("baz", "")));
     final String json = jsonMapper.writeValueAsString(input);
@@ -94,7 +94,7 @@ public class IndexableJacksonV2BasicTest
     throws Exception
   {
     final String json = "null";
-    final Indexable result = jsonMapper.readValue(json, MapBackedObject.class);
+    final Indexable result = jsonMapper.readValue(json, MutableMapBackedObject.class);
 
     assertThat(result, nullValue());
   }
@@ -104,7 +104,7 @@ public class IndexableJacksonV2BasicTest
     throws Exception
   {
     final String json = "{}";
-    final Indexable result = jsonMapper.readValue(json, MapBackedObject.class);
+    final Indexable result = jsonMapper.readValue(json, MutableMapBackedObject.class);
 
     assertThat(result.keySet(), empty());
   }
@@ -114,8 +114,8 @@ public class IndexableJacksonV2BasicTest
     throws Exception
   {
     final String json = "{\"foo\":1,\"bar\":true,\"baz\":\"text\"}";
-    final Indexable result = jsonMapper.readValue(json, MapBackedObject.class);
-    final Indexable expected = new MapBackedObject(Arrays.asList(
+    final Indexable result = jsonMapper.readValue(json, MutableMapBackedObject.class);
+    final Indexable expected = new MutableMapBackedObject(Arrays.asList(
       Pair.of("foo", 1),
       Pair.of("bar", true),
       Pair.of("baz", "text")));
@@ -142,18 +142,18 @@ public class IndexableJacksonV2BasicTest
   {
     assertThrows(
       MismatchedInputException.class,
-      () -> jsonMapper.readValue("[]", MapBackedObject.class));
+      () -> jsonMapper.readValue("[]", MutableMapBackedObject.class));
     assertThrows(
       MismatchedInputException.class,
-      () -> jsonMapper.readValue("true", MapBackedObject.class));
+      () -> jsonMapper.readValue("true", MutableMapBackedObject.class));
     assertThrows(
       MismatchedInputException.class,
-      () -> jsonMapper.readValue("\"foo\"", MapBackedObject.class));
+      () -> jsonMapper.readValue("\"foo\"", MutableMapBackedObject.class));
     assertThrows(
       MismatchedInputException.class,
-      () -> jsonMapper.readValue("3", MapBackedObject.class));
+      () -> jsonMapper.readValue("3", MutableMapBackedObject.class));
     assertThrows(
       MismatchedInputException.class,
-      () -> jsonMapper.readValue("3.14", MapBackedObject.class));
+      () -> jsonMapper.readValue("3.14", MutableMapBackedObject.class));
   }
 }

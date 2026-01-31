@@ -41,7 +41,7 @@ public final class PropertyDescriptorHelpers
         Collectors.toMap(
           PropertyDescriptor::getIndexKey,
           Function.identity(),
-          (l, r) -> r,
+          ChooseTheLastOneOperator.getInstance(),
           LinkedHashMap::new),
         Collections::unmodifiableMap));
   }
@@ -56,7 +56,7 @@ public final class PropertyDescriptorHelpers
       Collectors.toMap(
         PropertyDescriptor::getIndexKey,
         Function.identity(),
-        (l, r) -> r,
+        ChooseTheLastOneOperator.getInstance(),
         LinkedHashMap::new),
       Collections::unmodifiableMap));
   }
@@ -78,7 +78,7 @@ public final class PropertyDescriptorHelpers
         Collectors.toMap(
           PropertyDescriptor::getIndexKey,
           Function.identity(),
-          (l, r) -> r,
+          ChooseTheLastOneOperator.getInstance(),
           LinkedHashMap::new),
         Collections::unmodifiableMap));
   }

@@ -33,8 +33,6 @@ public interface Indexable
 
   boolean containsKey(Object key);
 
-  boolean containsValue(Object value);
-
   Object get(Object key);
 
   default Object getOrDefault(
@@ -88,8 +86,6 @@ public interface Indexable
 
   Set<String> keySet();
 
-  Collection<Object> values();
-
   Set<Map.Entry<String, Object>> entrySet();
 
   default void forEach(final BiConsumer<? super String, ? super Object> consumer)
@@ -121,10 +117,21 @@ public interface Indexable
     Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   );
 
+  /**
+   * Converts this {@link Indexable} to a {@link java.util.Map} instance.
+   *
+   * @return An {@link java.util.Map} instance with all property pairs.
+   */
   default Map<String, Object> toMap()
   {
     return toMap(LinkedHashMap::new);
   }
 
+  /**
+   * Converts this {@link Indexable} to a {@link java.util.Map} instance.
+   *
+   * @param mapSupplier A supplier for {@link java.util.Map} instance where the property pairs returned in.
+   * @return An {@link java.util.Map} instance with all property pairs.
+   */
   Map<String, Object> toMap(Supplier<Map<String, Object>> mapSupplier);
 }

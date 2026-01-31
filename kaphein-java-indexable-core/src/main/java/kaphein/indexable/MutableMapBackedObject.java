@@ -8,12 +8,12 @@ import java.util.Map.Entry;
 import java.util.function.Supplier;
 
 /**
- * <p>An immutable, map-backed implementation of {@link Indexable}.</p>
+ * <p>A mutable, map-backed implementation of {@link Indexable}.</p>
  * 
  * @see ImmutableMapBackedObject
  */
 @IndexableComplient
-public class ImmutableMapBackedObject extends AbstractMapBackedObject
+public class MutableMapBackedObject extends AbstractMapBackedObject
 {
   public static class PropertyDescriptors extends AbstractMapBackedObject.PropertyDescriptors
   {
@@ -36,30 +36,30 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
     }
   }
 
-  public ImmutableMapBackedObject()
+  public MutableMapBackedObject()
   {
     this(Collections.emptyList());
   }
 
-  public ImmutableMapBackedObject(
+  public MutableMapBackedObject(
     final Map<? extends String, ? extends Object> map
   )
   {
     this(map.entrySet());
   }
 
-  public ImmutableMapBackedObject(
+  public MutableMapBackedObject(
     final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   )
   {
     this(
-      ImmutableMapBackedObject::new,
+      MutableMapBackedObject::new,
       LinkedHashMap::new,
       PropertyDescriptors.getAllDescriptors().values(),
       entries);
   }
 
-  protected ImmutableMapBackedObject(
+  protected MutableMapBackedObject(
     final Supplier<? extends Indexable> selfSupplier,
     final Supplier<Map<String, Object>> mapSupplier,
     final Collection<? extends PropertyDescriptor<?>> descs,
@@ -76,26 +76,26 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
   @Override
   public Object put(final String key, final Object value)
   {
-    throw new UnsupportedOperationException("'put' is not supported.");
+    return doPut(key, value);
   }
 
   @Override
   public Object remove(final Object key)
   {
-    throw new UnsupportedOperationException("'remove' is not supported.");
+    return doRemove(key);
   }
 
   @Override
   public void clear()
   {
-    throw new UnsupportedOperationException("'clear' is not supported.");
+    doClear();
   }
 
   @Override
-  public ImmutableMapBackedObject withEntries(
+  public MutableMapBackedObject withEntries(
     final Collection<? extends Entry<? extends String, ? extends Object>> entries
   )
   {
-    return (ImmutableMapBackedObject)super.withEntries(entries);
+    return (MutableMapBackedObject)super.withEntries(entries);
   }
 }

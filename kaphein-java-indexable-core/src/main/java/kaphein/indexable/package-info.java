@@ -25,10 +25,42 @@
  * 
  * <h2>Core Components</h2>
  * <ul>
- *   <li>{@link kaphein.indexable.IndexableComplient} - Marker annotation.</li>
- *   <li>{@link kaphein.indexable.Indexable} - Main contract interface.</li>
- *   <li>{@link kaphein.indexable.PropertyDescriptor} - Property metadata.</li>
- *   <li>{@link kaphein.indexable.MapBackedObject} - A reference implementation.</li>
+ *   <li>{@link IndexableComplient} - Marker annotation.</li>
+ *   <li>{@link Indexable} - Main contract interface.</li>
+ *   <li>{@link PropertyDescriptor} - Property metadata.</li>
+ *   <li>{@link MapBackedObject} - A reference implementation.</li>
+ * </ul>
+ * 
+ * <h2>Requirements</h2>
+ * <p>Classes annotated with {@code @IndexableComplient} declare their intent
+ * to follow the contract's requirements, including:</p>
+ * <ul>
+ *   <li>Getting readable properties by a string key.</li>
+ *   <li>Setting writable properties by a string key.</li>
+ *   <li>Providing a {@code PropertyDescriptors} inner class.</li>
+ *   <li>Distinguishing between known and extra properties.</li>
+ * </ul>
+ * 
+ * <h2>{@code equals} and {@code hashCode}</h2>
+ * <p>Implementations MAY override {@code equals} and {@code hashCode}, but it is not a mandetory.
+ * <br>If overridden, the recommended semantics are {@link java.util.Map}-like equality:</p>
+ * <ul>
+ *   <li>Two {@link Indexable} instances are equal if they have the same key-value mappings.</li>
+ *   <li>Hash code should be computed from all key-value pairs, similar to {@link Map#hashCode()}.</li>
+ *   <li>{@link PropertyDescriptor}s themselves are <b>NOT</b> considered in equality - only the actual property values.</li>
+ * </ul>
+ * <p>Implementations may choose different equality semantics based on domain requirements.</p>
+ * 
+ * <h2>Thread safety</h2>
+ * <p>Implementations are <b>NOT</b> need to be thread-safe. 
+ * Using immutable variants is recommended for thread safety requirements.</p>
+ * 
+ * <h2>How to follow the contract</h2>
+ * <p>There are several ways to follow this contract:</p>
+ * <ul>
+ *  <li>Annotate target classes with {@link IndexableComplient} and manually write the essential components in the class defintion.</li>
+ *  <li>Implement {@link Indexable} interface and manually write the essential components in the class defintion.</li>
+ *  <li>Extend {@link MabBackedObject} class and manually write the essential components in the class defintion.</li>
  * </ul>
  * 
  * <h2>Example Usage</h2>

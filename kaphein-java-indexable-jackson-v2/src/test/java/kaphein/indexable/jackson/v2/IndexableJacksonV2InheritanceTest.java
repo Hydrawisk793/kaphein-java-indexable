@@ -26,7 +26,7 @@ import kaphein.indexable.IndexableComplient;
 import kaphein.indexable.PropertyDescriptor;
 import kaphein.indexable.PropertyDescriptorFactories;
 import kaphein.indexable.PropertyDescriptorHelpers;
-import kaphein.indexable.MapBackedObject;
+import kaphein.indexable.MutableMapBackedObject;
 import kaphein.indexable.internal.AssertArg;
 import kaphein.indexable.internal.MapFactories;
 import lombok.EqualsAndHashCode;
@@ -58,9 +58,9 @@ public class IndexableJacksonV2InheritanceTest
   }
 
   @IndexableComplient
-  public static class Bar extends MapBackedObject
+  public static class Bar extends MutableMapBackedObject
   {
-    public static class PropertyDescriptors extends MapBackedObject.PropertyDescriptors
+    public static class PropertyDescriptors extends MutableMapBackedObject.PropertyDescriptors
     {
       public static final PropertyDescriptor<
         String> PROP_FOO = PropertyDescriptorFactories
@@ -133,7 +133,7 @@ public class IndexableJacksonV2InheritanceTest
         String,
         ? extends PropertyDescriptor<?>> ALL_PROP_DESCS = PropertyDescriptorHelpers
           .allDescriptors(
-            MapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
+            MutableMapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
             getOwnDescriptors().values());
 
       public static Map<String, ? extends PropertyDescriptor<?>> getAllDescriptors()
