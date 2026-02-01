@@ -63,7 +63,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     @Override
     public boolean containsKey(final Object key)
     {
-      return owner.containsKey(key);
+      return owner.containsKey((String)key);
     }
 
     @Override
@@ -76,7 +76,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     @Override
     public Object get(final Object key)
     {
-      return owner.get(key);
+      return owner.get((String)key);
     }
 
     @Override
@@ -88,7 +88,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     @Override
     public Object remove(final Object key)
     {
-      return owner.remove(key);
+      return owner.remove((String)key);
     }
 
     @Override
@@ -178,13 +178,13 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   }
 
   @Override
-  public boolean containsKey(final Object key)
+  public boolean containsKey(final String key)
   {
     return propMap.containsKey(key);
   }
 
   @Override
-  public Object get(final Object key)
+  public Object get(final String key)
   {
     AssertArg.isNotNull(key, "key");
 
@@ -295,7 +295,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     return oldValue;
   }
 
-  protected Object doRemove(final Object key)
+  protected Object doRemove(final String key)
   {
     return propMap.remove(key);
   }

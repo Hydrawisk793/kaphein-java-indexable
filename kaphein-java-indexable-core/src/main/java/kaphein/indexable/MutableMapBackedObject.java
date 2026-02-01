@@ -80,7 +80,7 @@ public class MutableMapBackedObject extends AbstractMapBackedObject
   }
 
   @Override
-  public Object remove(final Object key)
+  public Object remove(final String key)
   {
     return doRemove(key);
   }

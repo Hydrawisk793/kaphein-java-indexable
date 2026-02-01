@@ -34,14 +34,19 @@ import kaphein.indexable.internal.AssertArg;
  */
 public interface Indexable
 {
+  /**
+   *  Returns {@code true} if this {@link Indexable} contains no property mappings.
+   *
+   *  @return {@code true} if this {@link Indexable} contains no property mappings.
+   */
   boolean isEmpty();
 
-  boolean containsKey(Object key);
+  boolean containsKey(String key);
 
-  Object get(Object key);
+  Object get(String key);
 
   default Object getOrDefault(
-    final Object key,
+    final String key,
     final Object defaultValue
   )
   {
@@ -79,7 +84,7 @@ public interface Indexable
     }
   }
 
-  default Object remove(final Object key)
+  default Object remove(final String key)
   {
     throw new UnsupportedOperationException("'remove' is not supported.");
   }
@@ -118,14 +123,22 @@ public interface Indexable
    */
   Iterable<Map.Entry<String, Object>> entries();
 
-  default void forEach(final BiConsumer<? super String, ? super Object> consumer)
+  /**
+   *  <p>Performs the given action for each entry in this {@link Indexable} until all entries have been processed or the action throws an exception.</p>
+   *  <p>Exceptions thrown by the action are relayed to the caller.</p>
+   * 
+   *  @param action The action to be performed for each entry.
+   *  @throws IllegalArgumentException If the specified {@code action} is {@code null}.
+   *  @throws ConcurrentModificationException If an entry is found to be removed during iteration.
+   */
+  default void forEach(final BiConsumer<? super String, ? super Object> action)
   {
-    AssertArg.isNotNull(consumer, "consumer");
+    AssertArg.isNotNull(action, "action");
 
     String key = null;
     Object value = null;
     for(
-      final Iterator<Map.Entry<String, Object>> iter = entries().iterator(); iter.hasNext(); consumer.accept(key,
+      final Iterator<Map.Entry<String, Object>> iter = entries().iterator(); iter.hasNext(); action.accept(key,
         value)
     )
     {

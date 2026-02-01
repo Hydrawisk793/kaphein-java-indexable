@@ -80,7 +80,7 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
   }
 
   @Override
-  public Object remove(final Object key)
+  public Object remove(final String key)
   {
     throw new UnsupportedOperationException("'remove' is not supported.");
   }
