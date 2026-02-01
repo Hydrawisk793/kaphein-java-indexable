@@ -82,7 +82,14 @@ public interface Indexable
 
   <T> T getByDescriptor(PropertyDescriptor<T> desc);
 
-  Map<String, Object> getExtraProperties();
+  /**
+   *  <p>Returns an {@link Iterable} of extra property mappings of this {@link Indexable}.</p>
+   *
+   *  <p>Extra property mappings are key-value mappings of properties that is not declared in the {@code PropertyDescriptors} static inner class.</p>
+   *
+   *  @return An {@link Iterable} of extra property mappings of this {@link Indexable}.
+   */
+  Iterable<Map.Entry<String, Object>> getExtraProperties();
 
   default Object put(
     final String key,

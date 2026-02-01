@@ -1,8 +1,11 @@
 package kaphein.indexable;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -216,14 +219,14 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   }
 
   @Override
-  public Map<String, Object> getExtraProperties()
+  public List<Map.Entry<String, Object>> getExtraProperties()
   {
-    final Map<String, Object> extraProps = new LinkedHashMap<>();
+    final List<Map.Entry<String, Object>> extraProps = new ArrayList<>();
     for(final String key : keys())
     {
       if(!descMap.containsKey(key))
       {
-        extraProps.put(key, propMap.get(key));
+        extraProps.add(new AbstractMap.SimpleImmutableEntry<>(key, propMap.get(key)));
       }
     }
 
