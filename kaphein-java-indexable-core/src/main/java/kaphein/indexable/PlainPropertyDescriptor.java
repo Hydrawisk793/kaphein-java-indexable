@@ -57,8 +57,8 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
     this.indexKey = AssertArg.isNotBlank(indexKey, "indexKey");
     this.propertyName = AssertArg.isNotBlank(propertyName, "propertyName");
     this.type = AssertArg.isNotNull(type, "type");
-    this.getter = AssertArg.isNotNull(getter, "getter");
-    this.setter = AssertArg.isNotNull(setter, "setter");
+    this.getter = getter;
+    this.setter = setter;
   }
 
   @Override
@@ -82,12 +82,22 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
   @Override
   public PropertyGetter<T> getGetter()
   {
+    if(null == getter)
+    {
+      throw new UnsupportedOperationException("Property " + getPropertyName() + " is write-only.");
+    }
+
     return getter;
   }
 
   @Override
   public PropertySetter<T> getSetter()
   {
+    if(null == setter)
+    {
+      throw new UnsupportedOperationException("Property " + getPropertyName() + " is read-only.");
+    }
+
     return setter;
   }
 }
