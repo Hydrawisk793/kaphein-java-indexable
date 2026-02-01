@@ -34,7 +34,21 @@ import kaphein.indexable.internal.AssertArg;
  */
 public interface Indexable
 {
+  boolean isEmpty();
+
+  boolean containsKey(Object key);
+
   Object get(Object key);
+
+  default Object getOrDefault(
+    final Object key,
+    final Object defaultValue
+  )
+  {
+    final Object value = get(key);
+
+    return (null == value && containsKey(key) ? defaultValue : value);
+  }
 
   <T> T getByDescriptor(PropertyDescriptor<T> desc);
 

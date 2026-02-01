@@ -57,13 +57,13 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     @Override
     public boolean isEmpty()
     {
-      return owner.propMap.isEmpty();
+      return owner.isEmpty();
     }
 
     @Override
     public boolean containsKey(final Object key)
     {
-      return owner.propMap.containsKey(key);
+      return owner.containsKey(key);
     }
 
     @Override
@@ -126,13 +126,13 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     @Override
     public boolean equals(final Object obj)
     {
-      return owner.equals(obj);
+      return owner.propMap.equals(obj);
     }
 
     @Override
     public int hashCode()
     {
-      return owner.hashCode();
+      return owner.propMap.hashCode();
     }
   }
 
@@ -169,6 +169,18 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     {
       doPut(entry.getKey(), entry.getValue());
     }
+  }
+
+  @Override
+  public boolean isEmpty()
+  {
+    return propMap.isEmpty();
+  }
+
+  @Override
+  public boolean containsKey(final Object key)
+  {
+    return propMap.containsKey(key);
   }
 
   @Override
@@ -228,19 +240,6 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   public Set<Map.Entry<String, Object>> entries()
   {
     return propMap.entrySet();
-  }
-
-  @Override
-  public boolean equals(final Object obj)
-  {
-    // TODO: [P1] Implement this.
-    throw new UnsupportedOperationException("'equals' is not implemented yet.");
-  }
-
-  @Override
-  public int hashCode()
-  {
-    return propMap.hashCode();
   }
 
   @Override
