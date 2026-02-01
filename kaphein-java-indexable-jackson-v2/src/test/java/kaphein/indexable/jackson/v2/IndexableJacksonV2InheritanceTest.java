@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import kaphein.indexable.IndexableComplient;
+import kaphein.indexable.IterableExtensions;
 import kaphein.indexable.PropertyDescriptor;
 import kaphein.indexable.PropertyDescriptorFactories;
 import kaphein.indexable.PropertyDescriptorHelpers;
@@ -31,7 +32,9 @@ import kaphein.indexable.internal.AssertArg;
 import kaphein.indexable.internal.MapFactories;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.experimental.ExtensionMethod;
 
+@ExtensionMethod({IterableExtensions.class})
 public class IndexableJacksonV2InheritanceTest
 {
   @EqualsAndHashCode
@@ -325,7 +328,7 @@ public class IndexableJacksonV2InheritanceTest
     final String json = "{}";
     final Bar result = jsonMapper.readValue(json, Bar.class);
 
-    assertThat(result.keySet(), empty());
+    assertThat(result.keys().toList(), empty());
   }
 
   @Test
@@ -346,16 +349,15 @@ public class IndexableJacksonV2InheritanceTest
       Pair.of("prop_piyo_piyo_piyo", new Foo(1, "2", true)),
       Pair.of("com.example.scheme-01:/segment_1/segment_2/segment_3", "textValue")));
 
-    assertThat(result.isEmpty(), equalTo(false));
-    assertThat(result.keySet(), containsInAnyOrder(expected.keySet().toArray()));
+    assertThat(result.keys(), containsInAnyOrder(expected.keys().toArray()));
     assertThat(
       result
-        .keySet()
+        .keys()
         .stream()
         .map(result::get)
         .collect(Collectors.toList()),
       containsInAnyOrder(expected
-        .keySet()
+        .keys()
         .stream()
         .map(expected::get)
         .collect(Collectors.toList())

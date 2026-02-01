@@ -5,20 +5,28 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import kaphein.indexable.internal.AssertArg;
 
 /**
- * <p>The core interface for the {@code Indexable} contract to make target class {@link IndexableComplient}.</p>
+ * <p>
+ * The core interface for the {@code Indexable} contract to make target class
+ * {@link IndexableComplient}.
+ * </p>
  * 
- * <p>This interface defines essential operations for accessing object properties by string keys, 
- * with additional type-safe access via {@link #getByDescriptor(PropertyDescriptor)}.</p>
+ * <p>
+ * This interface defines essential operations for accessing object properties
+ * by string keys,
+ * with additional type-safe access via
+ * {@link #getByDescriptor(PropertyDescriptor)}.
+ * </p>
  * 
- * <p>See the {@link kaphein.indexable} package documentation for
- * detailed contract explanation and usage examples.</p>
+ * <p>
+ * See the {@link kaphein.indexable} package documentation for
+ * detailed contract explanation and usage examples.
+ * </p>
  * 
  * @see kahpein.indexable
  * @see IndexableComplient
@@ -26,25 +34,7 @@ import kaphein.indexable.internal.AssertArg;
  */
 public interface Indexable
 {
-  int size();
-
-  boolean isEmpty();
-
-  boolean containsKey(Object key);
-
-  boolean containsValue(Object value);
-
   Object get(Object key);
-
-  default Object getOrDefault(
-    final Object key,
-    final Object defaultValue
-  )
-  {
-    final Object value = get(key);
-
-    return (null == value && containsKey(key) ? defaultValue : value);
-  }
 
   <T> T getByDescriptor(PropertyDescriptor<T> desc);
 
@@ -85,11 +75,34 @@ public interface Indexable
     throw new UnsupportedOperationException("'clear' is not supported.");
   }
 
-  Set<String> keySet();
+  /**
+   *  <p>Returns an {@link Iterable} view of the keys contained in this {@link Indexable}.</p>
+   *  <p>The iterable is backed by the indexable, so changes to the indexable are reflected in the iterable, and vice-versa.
+   *  If the indexable is modified while an iteration over the iterable is in progress 
+   *  (except through the iterator's own {@link Iterator#remove} operation), 
+   *  the results of the iteration are undefined.
+   *  The iterable supports element removal, which removes the corresponding mapping from the indexable, 
+   *  via the {@link Iterator#remove} operation.
+   *  It <b>DOES NOT</b> support adding elements into the indexable.</p>
+   *
+   *  @return An {@link Iterable} view of the keys contained in this {@link Indexable}.
+   */
+  Iterable<String> keys();
 
-  Collection<Object> values();
-
-  Set<Map.Entry<String, Object>> entrySet();
+  /**
+   *  <p>Returns an {@link Iterable} view of the mappings contained in this {@link Indexable}.</p>
+   *  <p>The iterable is backed by the indexable, so changes to the indexable are reflected in the iterable, and vice-versa.
+   *  If the indexable is modified while an iteration over the iterable is in progress 
+   *  (except through the iterator's own {@link Iterator#remove} operation, 
+   *  or through the {@link Map.Entry#setValue} operation on a mapping entry returned by the iterator), 
+   *  the results of the iteration are undefined.
+   *  The iterable supports element removal, which removes the corresponding mapping from the indexable, 
+   *  via the {@link Iterator#remove} operation.
+   *  It <b>DOES NOT</b> support adding elements into the indexable.</p>
+   * 
+   *  @return An {@link Iterable} view of the mappings contained in this {@link Indexable}.
+   */
+  Iterable<Map.Entry<String, Object>> entries();
 
   default void forEach(final BiConsumer<? super String, ? super Object> consumer)
   {
@@ -98,7 +111,7 @@ public interface Indexable
     String key = null;
     Object value = null;
     for(
-      final Iterator<Map.Entry<String, Object>> iter = entrySet().iterator(); iter.hasNext(); consumer.accept(key,
+      final Iterator<Map.Entry<String, Object>> iter = entries().iterator(); iter.hasNext(); consumer.accept(key,
         value)
     )
     {
@@ -117,42 +130,29 @@ public interface Indexable
   }
 
   /**
-   *  <p>Returns a {@link Map} accessor for the {@link Indexable}. (optional)</p>
+   * <p>
+   * Returns a {@link Map} accessor for the {@link Indexable}. (optional)
+   * </p>
    * 
-   *  <p>Unlike {@link toMap} method, this does not create a copied {@link Map}.</p>
+   * <p>
+   * Unlike {@link toMap} method, this does not create a copied {@link Map}.
+   * </p>
    * 
-   *  @return A {@link Map} accessor for the {@link Indexable}.
-   *  @throws UnsupportedOperationException If the implementation does not support this operation.
+   * @return A {@link Map} accessor for the {@link Indexable}.
+   * @throws UnsupportedOperationException If the implementation does not support
+   *                                       this operation.
    */
   default Map<String, Object> asMap()
   {
     throw new UnsupportedOperationException("'asMap' is not supported.");
   }
 
-  /**
-   *  <p>Compares the specified object with this entry for equality.</p>
-   *  <p>The comparison rules are same as the comparison rules of {@link java.util.Map}.</p>
-   *
-   *  @param o An object to be compared.
-   *  @return {@code true} if the specified object is equal to this {@link Indexable}.
-   *  @see java.util.Map#equals
-   */
-  @Override
-  boolean equals(Object o);
-
-  /**
-   *  <p>Returns the hash code value for this {@link Indexable}.</p>
-   *  <p>The generation rules are are same as the generation rules of {@link java.util.Map}.</p>
-   *
-   *  @return The hash code value.
-   *  @see java.util.Map#hashCode
-   */
-  @Override
-  int hashCode();
-
-  Indexable withEntries(
-    Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
-  );
+  default Indexable withEntries(
+    final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
+  )
+  {
+    throw new UnsupportedOperationException("'withEntries' is not supported.");
+  }
 
   /**
    * Converts this {@link Indexable} to a {@link java.util.Map} instance.
@@ -167,7 +167,8 @@ public interface Indexable
   /**
    * Converts this {@link Indexable} to a {@link java.util.Map} instance.
    *
-   * @param mapSupplier A supplier for {@link java.util.Map} instance where the property pairs returned in.
+   * @param mapSupplier A supplier for {@link java.util.Map} instance where the
+   *                    property pairs returned in.
    * @return An {@link java.util.Map} instance with all property pairs.
    */
   Map<String, Object> toMap(Supplier<Map<String, Object>> mapSupplier);

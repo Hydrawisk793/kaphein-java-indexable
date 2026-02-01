@@ -53,19 +53,19 @@ abstract class AbstractMapBackedObject implements Indexable
     @Override
     public int size()
     {
-      return owner.size();
+      return owner.propMap.size();
     }
 
     @Override
     public boolean isEmpty()
     {
-      return owner.isEmpty();
+      return owner.propMap.isEmpty();
     }
 
     @Override
     public boolean containsKey(final Object key)
     {
-      return owner.containsKey(key);
+      return owner.propMap.containsKey(key);
     }
 
     @Override
@@ -108,7 +108,7 @@ abstract class AbstractMapBackedObject implements Indexable
     @Override
     public Set<String> keySet()
     {
-      return owner.keySet();
+      return owner.propMap.keySet();
     }
 
     @Override
@@ -121,7 +121,8 @@ abstract class AbstractMapBackedObject implements Indexable
     @Override
     public Set<Entry<String, Object>> entrySet()
     {
-      return owner.entrySet();
+      // TODO: [P1] Implement this.
+      throw new UnsupportedOperationException("Unimplemented method 'values'");
     }
 
     @Override
@@ -137,7 +138,7 @@ abstract class AbstractMapBackedObject implements Indexable
     }
   }
 
-  private final Supplier<? extends Indexable> selfSupplier;
+  private final Supplier<? extends Indexable> emptySupplier;
 
   private final Map<String, PropertyDescriptor<?>> descMap;
 
@@ -146,13 +147,13 @@ abstract class AbstractMapBackedObject implements Indexable
   private final AtomicReference<MapView> mapViewRef;
 
   protected AbstractMapBackedObject(
-    final Supplier<? extends Indexable> selfSupplier,
+    final Supplier<? extends Indexable> emptySupplier,
     final Supplier<Map<String, Object>> mapSupplier,
     final Collection<? extends PropertyDescriptor<?>> descs,
     final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   )
   {
-    this.selfSupplier = AssertArg.isNotNull(selfSupplier, "selfSupplier");
+    this.emptySupplier = AssertArg.isNotNull(emptySupplier, "emptySupplier");
     this.descMap = AssertArg
       .isNotNull(descs, "descs")
       .stream()
@@ -170,30 +171,6 @@ abstract class AbstractMapBackedObject implements Indexable
     {
       doPut(entry.getKey(), entry.getValue());
     }
-  }
-
-  @Override
-  public boolean isEmpty()
-  {
-    return propMap.isEmpty();
-  }
-
-  @Override
-  public int size()
-  {
-    return propMap.size();
-  }
-
-  @Override
-  public boolean containsKey(final Object key)
-  {
-    return propMap.containsKey(key);
-  }
-
-  @Override
-  public boolean containsValue(final Object value)
-  {
-    return propMap.containsValue(value);
   }
 
   @Override
@@ -232,7 +209,7 @@ abstract class AbstractMapBackedObject implements Indexable
   public Map<String, Object> getExtraProperties()
   {
     final Map<String, Object> extraProps = new LinkedHashMap<>();
-    for(final String key : propMap.keySet())
+    for(final String key : keys())
     {
       if(!descMap.containsKey(key))
       {
@@ -244,19 +221,13 @@ abstract class AbstractMapBackedObject implements Indexable
   }
 
   @Override
-  public Set<String> keySet()
+  public Set<String> keys()
   {
     return propMap.keySet();
   }
 
   @Override
-  public Collection<Object> values()
-  {
-    return propMap.values();
-  }
-
-  @Override
-  public Set<Map.Entry<String, Object>> entrySet()
+  public Set<Map.Entry<String, Object>> entries()
   {
     return propMap.entrySet();
   }
@@ -287,7 +258,7 @@ abstract class AbstractMapBackedObject implements Indexable
   {
     AssertArg.isNotNull(entries, "entries");
 
-    final AbstractMapBackedObject result = (AbstractMapBackedObject)selfSupplier.get();
+    final AbstractMapBackedObject result = (AbstractMapBackedObject)emptySupplier.get();
     result.putAll(entries);
 
     return result;

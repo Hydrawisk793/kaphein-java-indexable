@@ -77,7 +77,7 @@ public class IndexableSerializer extends StdSerializer<Indexable>
     throws IOException,
     JsonProcessingException
   {
-    for(final String k : value.keySet())
+    for(final String k : value.keys())
     {
       if(null != k)
       {

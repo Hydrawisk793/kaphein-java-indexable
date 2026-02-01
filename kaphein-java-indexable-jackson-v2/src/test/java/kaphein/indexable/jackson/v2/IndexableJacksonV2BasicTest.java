@@ -16,8 +16,11 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import kaphein.indexable.Indexable;
+import kaphein.indexable.IterableExtensions;
 import kaphein.indexable.MutableMapBackedObject;
+import lombok.experimental.ExtensionMethod;
 
+@ExtensionMethod({IterableExtensions.class})
 public class IndexableJacksonV2BasicTest
 {
   private final JsonMapper jsonMapper;
@@ -106,7 +109,7 @@ public class IndexableJacksonV2BasicTest
     final String json = "{}";
     final Indexable result = jsonMapper.readValue(json, MutableMapBackedObject.class);
 
-    assertThat(result.keySet(), empty());
+    assertThat(result.keys().toList(), empty());
   }
 
   @Test
@@ -120,16 +123,14 @@ public class IndexableJacksonV2BasicTest
       Pair.of("bar", true),
       Pair.of("baz", "text")));
 
-    assertThat(result.isEmpty(), equalTo(false));
-    assertThat(result.keySet(), containsInAnyOrder(expected.keySet().toArray()));
-    assertThat(
-      result
-        .keySet()
-        .stream()
-        .map(result::get)
-        .collect(Collectors.toList()),
+    assertThat(result.keys(), containsInAnyOrder(expected.keys().toArray()));
+    assertThat(result
+      .keys()
+      .stream()
+      .map(result::get)
+      .collect(Collectors.toList()),
       containsInAnyOrder(expected
-        .keySet()
+        .keys()
         .stream()
         .map(expected::get)
         .collect(Collectors.toList())

@@ -60,14 +60,14 @@ public class MutableMapBackedObject extends AbstractMapBackedObject
   }
 
   protected MutableMapBackedObject(
-    final Supplier<? extends Indexable> selfSupplier,
+    final Supplier<? extends Indexable> emptySupplier,
     final Supplier<Map<String, Object>> mapSupplier,
     final Collection<? extends PropertyDescriptor<?>> descs,
     final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   )
   {
     super(
-      selfSupplier,
+      emptySupplier,
       mapSupplier,
       descs,
       entries);

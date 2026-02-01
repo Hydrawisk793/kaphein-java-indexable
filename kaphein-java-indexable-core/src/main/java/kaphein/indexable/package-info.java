@@ -43,14 +43,6 @@
  *   <li>Distinguishing between known and extra properties.</li>
  * </ul>
  * 
- * <h2>{@code equals} and {@code hashCode}</h2>
- * <p>Implementations MUST override {@code equals} and {@code hashCode} with {@link java.util.Map}-like equality semantics:</p>
- * <ul>
- *   <li>Two {@link Indexable} instances are equal if they have the same key-value mappings.</li>
- *   <li>Hash code should be computed from all key-value pairs, similar to {@link Map#hashCode()}.</li>
- *   <li>{@link PropertyDescriptor}s themselves are <b>NOT</b> considered in equality - only the actual property values.</li>
- * </ul>
- * 
  * <h2>Thread safety</h2>
  * <p>Implementations are <b>NOT</b> need to be thread-safe. 
  * Using immutable variants is recommended for thread safety requirements.</p>
@@ -117,14 +109,14 @@
  *   }
  *
  *   protected Person(
- *     final Supplier&lt;? extends Indexable&gt; selfSupplier,
+ *     final Supplier&lt;? extends Indexable&gt; emptySupplier,
  *     final Supplier&lt;Map&lt;String, Object&gt;&gt; mapSupplier,
  *     final Collection&lt;? extends PropertyDescriptor&lt;?&gt;&gt; descs,
  *     final Collection&lt;? extends Map.Entry&lt;? extends String, ? extends Object&gt;&gt; entries
  *   )
  *   {
  *     super(
- *       selfSupplier,
+ *       emptySupplier,
  *       mapSupplier,
  *       descs,
  *       entries);
