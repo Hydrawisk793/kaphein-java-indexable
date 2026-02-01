@@ -153,7 +153,7 @@ public interface Indexable
   /**
    * Converts this {@link Indexable} to a {@link java.util.Map} instance.
    *
-   * @return An {@link java.util.Map} instance with all property pairs.
+   * @return An {@link java.util.Map} instance with all property mappings.
    */
   default Map<String, Object> toMap()
   {
@@ -163,9 +163,8 @@ public interface Indexable
   /**
    * Converts this {@link Indexable} to a {@link java.util.Map} instance.
    *
-   * @param mapSupplier A supplier for {@link java.util.Map} instance where the
-   *                    property pairs returned in.
-   * @return An {@link java.util.Map} instance with all property pairs.
+   * @param mapSupplier A supplier for {@link java.util.Map} instance where the property pairs returned in.
+   * @return An {@link java.util.Map} instance with all property mappings.
    */
   Map<String, Object> toMap(Supplier<Map<String, Object>> mapSupplier);
 }

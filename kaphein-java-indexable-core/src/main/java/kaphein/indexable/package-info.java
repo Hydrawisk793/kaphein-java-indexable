@@ -26,9 +26,10 @@
  * 
  * <h2>Core Components</h2>
  * <ul>
- *   <li>{@link IndexableComplient} - Marker annotation.</li>
- *   <li>{@link Indexable} - Main contract interface.</li>
+ *   <li>{@link IndexableComplient} - The marker annotation.</li>
+ *   <li>{@link Indexable} - The main contract interface.</li>
  *   <li>{@link PropertyDescriptor} - Property metadata.</li>
+ *   <li>{@link MapBackedObject} - A sub interface for {@code java.util.Map}-backed implementations.</li>
  *   <li>{@link MutableMapBackedObject} - A reference implementation for mutable ones.</li>
  *   <li>{@link ImmutableMapBackedObject} - A reference implementation for immutable ones.</li>
  * </ul>
@@ -135,6 +136,10 @@
  *     return (Person)super.withEntries(entries);
  *   }
  * }
+ * 
+ * Person person = new Person();
+ * person.put("name", "Alice");           // A known property,
+ * person.put("extraField", "value");     // A extra property - no error.
  * </pre>
  * 
  * @see kaphein.indexable.Indexable
