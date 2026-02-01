@@ -16,8 +16,8 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import kaphein.indexable.Indexable;
-import kaphein.indexable.IterableExtensions;
 import kaphein.indexable.MutableMapBackedObject;
+import kaphein.indexable.internal.IterableExtensions;
 import lombok.experimental.ExtensionMethod;
 
 @ExtensionMethod({IterableExtensions.class})

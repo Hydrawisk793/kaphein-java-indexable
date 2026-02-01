@@ -1,11 +1,9 @@
-package kaphein.indexable;
+package kaphein.indexable.internal;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import kaphein.indexable.internal.AssertArg;
 
 public final class IterableExtensions
 {

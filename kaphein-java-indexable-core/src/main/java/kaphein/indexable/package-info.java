@@ -59,9 +59,9 @@
  * <h2>Example Usage</h2>
  * <pre>
  * &#64;IndexableComplient
- * public class Person extends MapBackedObject
+ * public class Person extends MutableMapBackedObject
  * {
- *   public static class PropertyDescriptors extends MapBackedObject.PropertyDescriptors
+ *   public static class PropertyDescriptors extends MutableMapBackedObject.PropertyDescriptors
  *   {
  *     public static final PropertyDescriptor&lt;String&gt; NAME = PropertyDescriptorFactories.createString(
  *       "name");
@@ -77,7 +77,7 @@
  *
  *     private static final Map&lt;String, ? extends PropertyDescriptor&lt;?&gt;&gt; ALL_PROP_DESCS = PropertyDescriptorHelpers
  *       .allDescriptors(
- *         MapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
+ *         MutableMapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
  *         getOwnDescriptors().values());
  *
  *     public static Map&lt;String, ? extends PropertyDescriptor&lt;?&gt;&gt; getAllDescriptors()
@@ -103,24 +103,24 @@
  *   )
  *   {
  *     this(
- *       Person::new,
  *       LinkedHashMap::new,
  *       PropertyDescriptors.getAllDescriptors().values(),
- *       entries);
+ *       entries,
+ *       Person::new);
  *   }
  *
  *   protected Person(
- *     final Supplier&lt;? extends Indexable&gt; emptySupplier,
  *     final Supplier&lt;Map&lt;String, Object&gt;&gt; mapSupplier,
  *     final Collection&lt;? extends PropertyDescriptor&lt;?&gt;&gt; descs,
- *     final Collection&lt;? extends Map.Entry&lt;? extends String, ? extends Object&gt;&gt; entries
+ *     final Collection&lt;? extends Map.Entry&lt;? extends String, ? extends Object&gt;&gt; entries,
+ *     final Supplier&lt;? extends Indexable&gt; emptySupplier
  *   )
  *   {
  *     super(
- *       emptySupplier,
  *       mapSupplier,
  *       descs,
- *       entries);
+ *       entries,
+ *       emptySupplier);
  *   }
  *
  *   public String getName()
@@ -130,7 +130,7 @@
  *
  *   &#64;Override
  *   public Person withEntries(
- *     final Collection&lt;? extends Entry&lt;? extends String, ? extends Object&gt;&gt; entries
+ *     final Collection&lt;? extends Map.Entry&lt;? extends String, ? extends Object&gt;&gt; entries
  *   )
  *   {
  *     return (Person)super.withEntries(entries);
