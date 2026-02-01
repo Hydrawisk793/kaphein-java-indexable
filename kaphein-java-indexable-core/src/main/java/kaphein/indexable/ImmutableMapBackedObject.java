@@ -53,24 +53,24 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
   )
   {
     this(
-      ImmutableMapBackedObject::new,
       LinkedHashMap::new,
       PropertyDescriptors.getAllDescriptors().values(),
-      entries);
+      entries,
+      ImmutableMapBackedObject::new);
   }
 
   protected ImmutableMapBackedObject(
-    final Supplier<? extends Indexable> emptySupplier,
     final Supplier<Map<String, Object>> mapSupplier,
     final Collection<? extends PropertyDescriptor<?>> descs,
-    final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
+    final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries,
+    final Supplier<? extends Indexable> emptySupplier
   )
   {
     super(
-      emptySupplier,
       mapSupplier,
       descs,
-      entries);
+      entries,
+      emptySupplier);
   }
 
   @Override

@@ -42,119 +42,21 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     }
   }
 
-  private static final class MapView implements Map<String, Object>
-  {
-    private final AbstractMapBackedObject owner;
-
-    private MapView(final AbstractMapBackedObject owner)
-    {
-      this.owner = AssertArg.isNotNull(owner, "owner");
-    }
-
-    @Override
-    public int size()
-    {
-      return owner.propMap.size();
-    }
-
-    @Override
-    public boolean isEmpty()
-    {
-      return owner.isEmpty();
-    }
-
-    @Override
-    public boolean containsKey(final Object key)
-    {
-      return owner.containsKey((String)key);
-    }
-
-    @Override
-    public boolean containsValue(final Object value)
-    {
-      // TODO: [P1] Implement this.
-      throw new UnsupportedOperationException("Unimplemented method 'containsValue'");
-    }
-
-    @Override
-    public Object get(final Object key)
-    {
-      return owner.get((String)key);
-    }
-
-    @Override
-    public Object put(final String key, final Object value)
-    {
-      return owner.put(key, value);
-    }
-
-    @Override
-    public Object remove(final Object key)
-    {
-      return owner.remove((String)key);
-    }
-
-    @Override
-    public void putAll(final Map<? extends String, ? extends Object> m)
-    {
-      owner.putAll(m);
-    }
-
-    @Override
-    public void clear()
-    {
-      owner.clear();
-    }
-
-    @Override
-    public Set<String> keySet()
-    {
-      return owner.propMap.keySet();
-    }
-
-    @Override
-    public Collection<Object> values()
-    {
-      // TODO: [P1] Implement a dedicated Values view class.
-      throw new UnsupportedOperationException("Unimplemented method 'values'");
-    }
-
-    @Override
-    public Set<Entry<String, Object>> entrySet()
-    {
-      // TODO: [P1] Implement a dedicated EntrySet view class.
-      throw new UnsupportedOperationException("Unimplemented method 'values'");
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-      return owner.propMap.equals(obj);
-    }
-
-    @Override
-    public int hashCode()
-    {
-      return owner.propMap.hashCode();
-    }
-  }
-
-  private final Supplier<? extends Indexable> emptySupplier;
-
   private final Map<String, PropertyDescriptor<?>> descMap;
 
   private final Map<String, Object> propMap;
 
-  private final AtomicReference<MapView> mapViewRef;
+  private final Supplier<? extends Indexable> emptySupplier;
+
+  private final AtomicReference<MapBackedObjectMapView> mapViewRef;
 
   protected AbstractMapBackedObject(
-    final Supplier<? extends Indexable> emptySupplier,
     final Supplier<Map<String, Object>> mapSupplier,
     final Collection<? extends PropertyDescriptor<?>> descs,
-    final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
+    final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries,
+    final Supplier<? extends Indexable> emptySupplier
   )
   {
-    this.emptySupplier = AssertArg.isNotNull(emptySupplier, "emptySupplier");
     this.descMap = AssertArg
       .isNotNull(descs, "descs")
       .stream()
@@ -166,6 +68,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
           LinkedHashMap::new),
         Collections::unmodifiableMap));
     this.propMap = AssertArg.isNotNull(mapSupplier, "mapSupplier").get();
+    this.emptySupplier = emptySupplier;
     this.mapViewRef = new AtomicReference<>();
 
     for(final Map.Entry<? extends String, ? extends Object> entry : entries)
@@ -258,6 +161,11 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   {
     AssertArg.isNotNull(entries, "entries");
 
+    if(null == emptySupplier)
+    {
+      throw new UnsupportedOperationException("'withEntries' is not supported.");
+    }
+
     final AbstractMapBackedObject result = (AbstractMapBackedObject)emptySupplier.get();
     result.putAll(entries);
 
@@ -308,8 +216,15 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     propMap.clear();
   }
 
-  private MapView createOrGetMapView(final MapView mapView)
+  Map<String, Object> getPropMap()
   {
-    return ((null == mapView) ? new MapView(this) : mapView);
+    return propMap;
+  }
+
+  private MapBackedObjectMapView createOrGetMapView(
+    final MapBackedObjectMapView mapView
+  )
+  {
+    return ((null == mapView) ? new MapBackedObjectMapView(this) : mapView);
   }
 }

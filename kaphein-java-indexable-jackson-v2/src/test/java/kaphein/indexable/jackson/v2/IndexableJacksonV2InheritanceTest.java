@@ -153,28 +153,28 @@ public class IndexableJacksonV2InheritanceTest
     public Bar()
     {
       super(
-        Bar::new,
         LinkedHashMap::new,
         PropertyDescriptors.getAllDescriptors().values(),
-        Collections.emptyList());
+        Collections.emptyList(),
+        null);
     }
 
     public Bar(final Bar src)
     {
       super(
-        Bar::new,
         LinkedHashMap::new,
         PropertyDescriptors.getAllDescriptors().values(),
-        AssertArg.isNotNull(src, "src").toMap().entrySet());
+        AssertArg.isNotNull(src, "src").toMap().entrySet(),
+        null);
     }
 
     public Bar(final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries)
     {
       super(
-        Bar::new,
         LinkedHashMap::new,
         PropertyDescriptors.getAllDescriptors().values(),
-        AssertArg.isNotNull(entries, "entries"));
+        AssertArg.isNotNull(entries, "entries"),
+        null);
     }
 
     public String getPropFoo()
