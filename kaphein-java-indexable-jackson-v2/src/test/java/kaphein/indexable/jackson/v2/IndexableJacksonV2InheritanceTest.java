@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
-import kaphein.indexable.IndexableComplient;
 import kaphein.indexable.PropertyDescriptor;
 import kaphein.indexable.PropertyDescriptorFactories;
 import kaphein.indexable.PropertyDescriptorHelpers;
@@ -60,7 +59,6 @@ public class IndexableJacksonV2InheritanceTest
     }
   }
 
-  @IndexableComplient
   public static class Bar extends MutableMapBackedObject
   {
     public static class PropertyDescriptors extends MutableMapBackedObject.PropertyDescriptors

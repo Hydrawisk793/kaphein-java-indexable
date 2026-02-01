@@ -12,7 +12,6 @@ import java.util.function.Supplier;
  * 
  * @see ImmutableMapBackedObject
  */
-@IndexableComplient
 public class MutableMapBackedObject extends AbstractMapBackedObject
 {
   public static class PropertyDescriptors extends AbstractMapBackedObject.PropertyDescriptors

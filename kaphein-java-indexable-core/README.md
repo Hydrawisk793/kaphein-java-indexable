@@ -1,6 +1,6 @@
 # kaphein-java-indexable-core
 
-Provides essential utility components for `IndexableComplient` objects.
+Provides essential utility components for `Indexable` objects.
 
 ## Supported JDK versions
 

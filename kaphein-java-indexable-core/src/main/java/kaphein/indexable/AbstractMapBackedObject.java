@@ -18,7 +18,6 @@ import kaphein.indexable.internal.AssertArg;
 /**
  *  <p>An abstract class for {@link MapBackedObject} implementations.</p>
  */
-@IndexableComplient
 abstract class AbstractMapBackedObject implements MapBackedObject
 {
   public static class PropertyDescriptors

@@ -2,11 +2,9 @@
 
 Defines the contract of `Indexable`.
 
-## What is `IndexableComplient` and `Indexable`?
+## What is `Indexable`?
 
-`IndexableComplient` is an annotation for a contract to represent POJOs with `java.util.Map`-like capabilities.
-
-`Indexable` is an interface to represent POJOs who compiles `IndexableComplient` and base abstract classes to implement `IndexableComplient` POJO classes.
+`Indexable` is the name of a contract to represent POJOs with `java.util.Map`-like capabilities and it is also a name of Java `interface` to realize that contract.
 
 ## Why this contract is introduced?
 

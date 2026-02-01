@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import kaphein.indexable.internal.AssertArg;
 
 /**
- *  <p>The core interface for the {@code Indexable} contract to make target class {@link IndexableComplient}.</p>
+ *  <p>The core interface for the {@code Indexable} contract to make implementations comply with the the contract.</p>
  *
  *  <p>This interface defines essential operations for accessing object properties by string keys,
  *  with additional type-safe access via {@link #getByDescriptor(PropertyDescriptor)}.</p>
@@ -23,7 +23,6 @@ import kaphein.indexable.internal.AssertArg;
  *  detailed contract explanation and usage examples.</p>
  *
  *  @see kahpein.indexable
- *  @see IndexableComplient
  *  @see PropertyDescriptor
  */
 public interface Indexable

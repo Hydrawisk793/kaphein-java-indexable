@@ -26,7 +26,6 @@
  * 
  * <h2>Core Components</h2>
  * <ul>
- *   <li>{@link IndexableComplient} - The marker annotation.</li>
  *   <li>{@link Indexable} - The main contract interface.</li>
  *   <li>{@link PropertyDescriptor} - Property metadata.</li>
  *   <li>{@link MapBackedObject} - A sub interface for {@code java.util.Map}-backed implementations.</li>
@@ -35,7 +34,7 @@
  * </ul>
  * 
  * <h2>Requirements</h2>
- * <p>Classes annotated with {@code @IndexableComplient} declare their intent
+ * <p>Implementations of {@link Indexable} declare their intent
  * to follow the contract's requirements, including:</p>
  * <ul>
  *   <li>Getting readable properties by a string key.</li>
@@ -51,14 +50,12 @@
  * <h2>How to follow the contract</h2>
  * <p>There are several ways to follow this contract:</p>
  * <ul>
- *  <li>Annotate target classes with {@link IndexableComplient} and manually write the essential components in the class defintion.</li>
- *  <li>Implement {@link Indexable} interface and manually write the essential components in the class defintion.</li>
- *  <li>Extend {@link MabBackedObject} class and manually write the essential components in the class defintion.</li>
+ *  <li>Implement {@link Indexable} interface and manually write the remaining components in the class defintion.</li>
+ *  <li>Extend {@link MabBackedObject} class and manually write the remaining components in the class defintion.</li>
  * </ul>
  * 
  * <h2>Example Usage</h2>
  * <pre>
- * &#64;IndexableComplient
  * public class Person extends MutableMapBackedObject
  * {
  *   public static class PropertyDescriptors extends MutableMapBackedObject.PropertyDescriptors
@@ -143,6 +140,5 @@
  * </pre>
  * 
  * @see kaphein.indexable.Indexable
- * @see kaphein.indexable.IndexableComplient
  */
 package kaphein.indexable;
