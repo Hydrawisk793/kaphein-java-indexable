@@ -15,8 +15,6 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
 
   private final Type type;
 
-  private final PropertyCoercer<T> coercer;
-
   private final PropertyGetter<T> getter;
 
   private final PropertySetter<T> setter;
@@ -29,7 +27,6 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
       AssertArg.isNotNull(src, "src").getPropertyName(),
       AssertArg.isNotNull(src, "src").getIndexKey(),
       AssertArg.isNotNull(src, "src").getType(),
-      AssertArg.isNotNull(src, "src").getCoercer(),
       AssertArg.isNotNull(src, "src").getGetter(),
       AssertArg.isNotNull(src, "src").getSetter());
   }
@@ -37,7 +34,6 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
   public PlainPropertyDescriptor(
     final String indexKey,
     final Type type,
-    final PropertyCoercer<T> coercer,
     final PropertyGetter<T> getter,
     final PropertySetter<T> setter
   )
@@ -46,7 +42,6 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
       indexKey,
       indexKey,
       type,
-      coercer,
       getter,
       setter);
   }
@@ -55,7 +50,6 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
     final String indexKey,
     final String propertyName,
     final Type type,
-    final PropertyCoercer<T> coercer,
     final PropertyGetter<T> getter,
     final PropertySetter<T> setter
   )
@@ -63,7 +57,6 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
     this.indexKey = AssertArg.isNotBlank(indexKey, "indexKey");
     this.propertyName = AssertArg.isNotBlank(propertyName, "propertyName");
     this.type = AssertArg.isNotNull(type, "type");
-    this.coercer = AssertArg.isNotNull(coercer, "coercer");
     this.getter = AssertArg.isNotNull(getter, "getter");
     this.setter = AssertArg.isNotNull(setter, "setter");
   }
@@ -84,12 +77,6 @@ public class PlainPropertyDescriptor<T> implements PropertyDescriptor<T>
   public Type getType()
   {
     return type;
-  }
-
-  @Override
-  public PropertyCoercer<T> getCoercer()
-  {
-    return coercer;
   }
 
   @Override

@@ -12,9 +12,12 @@ import java.util.stream.Stream;
 
 import kaphein.indexable.internal.AssertArg;
 
-public final class PropertyDescriptorHelpers
+/**
+ *  <p>Provides {@link java.util.Map} utilities for declaring {@link PropertyDescriptor} getter methods of {@code PropertyDescriptors} class.</p>
+ */
+public final class PropertyDescriptorMaps
 {
-  private PropertyDescriptorHelpers()
+  private PropertyDescriptorMaps()
   {
     // Empty.
   }

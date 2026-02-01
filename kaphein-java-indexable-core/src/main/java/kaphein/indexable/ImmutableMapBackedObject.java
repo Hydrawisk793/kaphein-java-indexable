@@ -16,7 +16,7 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
 {
   public static class PropertyDescriptors extends AbstractMapBackedObject.PropertyDescriptors
   {
-    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorHelpers
+    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorMaps
       .ownDescriptors(Collections.emptyList());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getOwnDescriptors()
@@ -24,7 +24,7 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
       return OWN_DESC_MAP;
     }
 
-    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorHelpers
+    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorMaps
       .allDescriptors(
         AbstractMapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
         getOwnDescriptors().values());

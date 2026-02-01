@@ -40,7 +40,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Boolean.class,
-      Boolean.class::cast,
       (desc, m) -> MapUtils.getBoolean(m, mapKey),
       (desc, m, v) -> m.put(
         mapKey,
@@ -65,7 +64,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Integer.class,
-      Integer.class::cast,
       (desc, m) -> MapUtils.getInteger(m, mapKey),
       (desc, m, v) -> m.put(
         mapKey,
@@ -90,7 +88,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Long.class,
-      Long.class::cast,
       (desc, m) -> MapUtils.getLong(m, mapKey),
       (desc, m, v) -> m.put(
         mapKey,
@@ -115,7 +112,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Double.class,
-      Double.class::cast,
       (desc, m) -> MapUtils.getDouble(m, mapKey),
       (desc, m, v) -> m.put(
         mapKey,
@@ -140,7 +136,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       String.class,
-      String.class::cast,
       (desc, m) -> MapUtils.getString(m, mapKey),
       (desc, m, v) -> m.put(
         mapKey,
@@ -165,7 +160,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Instant.class,
-      Instant.class::cast,
       (desc, m) -> (Instant)MapUtils.getObject(m, mapKey),
       (desc, m, v) ->
       {
@@ -215,7 +209,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       ZonedDateTime.class,
-      ZonedDateTime.class::cast,
       (desc, m) -> (ZonedDateTime)MapUtils.getObject(m, mapKey),
       (desc, m, v) ->
       {
@@ -265,7 +258,6 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       URI.class,
-      URI.class::cast,
       (desc, m) -> (URI)MapUtils.getObject(m, mapKey),
       (desc, m, v) ->
       {
@@ -347,7 +339,6 @@ public final class PropertyDescriptorFactories
             elementType.getName());
         }
       }),
-      List.class::cast,
       (desc, m) -> (List<E>)(m.get(mapKey)),
       (desc, m, v) ->
       {
@@ -428,7 +419,6 @@ public final class PropertyDescriptorFactories
             elementType.getName());
         }
       }),
-      Set.class::cast,
       (desc, m) -> (Set<E>)(m.get(mapKey)),
       (desc, m, v) ->
       {
@@ -507,7 +497,6 @@ public final class PropertyDescriptorFactories
             Object.class.getName());
         }
       }),
-      Map.class::cast,
       (desc, m) -> (Map<String, Object>)MapUtils.getMap(m, mapKey),
       (desc, m, v) -> m.put(mapKey, (Map<String, Object>)v));
   }
@@ -560,7 +549,6 @@ public final class PropertyDescriptorFactories
             Object.class.getName());
         }
       }),
-      Map.class::cast,
       (desc, m) -> (Map<String, String>)MapUtils.getMap(m, mapKey),
       (desc, m, v) -> m.put(mapKey, (Map<String, String>)v));
   }
@@ -576,6 +564,7 @@ public final class PropertyDescriptorFactories
       type);
   }
 
+  @SuppressWarnings("unchecked")
   public static <T> PropertyDescriptor<T> createSimple(
     final String mapKey,
     final String propName,
@@ -586,10 +575,9 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       type,
-      type::cast,
-      (desc, m) -> desc.getCoercer().coerce(m.get(mapKey)),
+      (desc, m) -> ((Class<T>)desc.getType()).cast(m.get(mapKey)),
       (desc, m, v) -> m.put(
         mapKey,
-        (null == v ? null : desc.getCoercer().coerce((v)))));
+        (null == v ? null : ((Class<T>)desc.getType()).cast((v)))));
   }
 }

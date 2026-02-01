@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import kaphein.indexable.PropertyDescriptor;
 import kaphein.indexable.PropertyDescriptorFactories;
-import kaphein.indexable.PropertyDescriptorHelpers;
+import kaphein.indexable.PropertyDescriptorMaps;
 import kaphein.indexable.MutableMapBackedObject;
 import kaphein.indexable.internal.AssertArg;
 import kaphein.indexable.internal.IterableExtensions;
@@ -114,7 +114,7 @@ public class IndexableJacksonV2InheritanceTest
 
       private static final Map<
         String,
-        ? extends PropertyDescriptor<?>> OWN_PROP_DESCS = PropertyDescriptorHelpers
+        ? extends PropertyDescriptor<?>> OWN_PROP_DESCS = PropertyDescriptorMaps
           .ownDescriptors(
             PROP_FOO,
             PROP_BAR,
@@ -132,7 +132,7 @@ public class IndexableJacksonV2InheritanceTest
 
       private static final Map<
         String,
-        ? extends PropertyDescriptor<?>> ALL_PROP_DESCS = PropertyDescriptorHelpers
+        ? extends PropertyDescriptor<?>> ALL_PROP_DESCS = PropertyDescriptorMaps
           .allDescriptors(
             MutableMapBackedObject.PropertyDescriptors.getAllDescriptors().values(),
             getOwnDescriptors().values());

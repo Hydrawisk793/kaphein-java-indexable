@@ -25,8 +25,6 @@ public interface PropertyDescriptor<T>
    */
   Type getType();
 
-  PropertyCoercer<T> getCoercer();
-
   /**
    *  <p>Returns the getter function of the propety.</p>
    *  

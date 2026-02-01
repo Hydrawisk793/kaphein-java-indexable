@@ -22,7 +22,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
 {
   public static class PropertyDescriptors
   {
-    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorHelpers
+    private static final Map<String, ? extends PropertyDescriptor<?>> OWN_DESC_MAP = PropertyDescriptorMaps
       .ownDescriptors(Collections.emptyList());
 
     public static Map<String, ? extends PropertyDescriptor<?>> getOwnDescriptors()
@@ -30,7 +30,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
       return OWN_DESC_MAP;
     }
 
-    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorHelpers
+    private static final Map<String, ? extends PropertyDescriptor<?>> ALL_DESC_MAP = PropertyDescriptorMaps
       .allDescriptors(
         Collections.emptyList(),
         getOwnDescriptors().values());
@@ -115,9 +115,7 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   {
     AssertArg.isNotNull(desc, "desc");
 
-    final Object v = propMap.get(desc.getIndexKey());
-
-    return (null == v ? null : desc.getCoercer().coerce(v));
+    return desc.getGetter().apply(desc, propMap);
   }
 
   @Override

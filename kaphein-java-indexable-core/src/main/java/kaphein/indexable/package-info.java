@@ -37,10 +37,10 @@
  * <p>Implementations of {@link Indexable} declare their intent
  * to follow the contract's requirements, including:</p>
  * <ul>
+ *   <li>Declaring a {@code public static inner class} named {@code PropertyDescriptors}.</li>
+ *   <li>Distinguishing between known and extra properties.</li>
  *   <li>Getting readable properties by a string key.</li>
  *   <li>Setting writable properties by a string key.</li>
- *   <li>Providing a {@code PropertyDescriptors} inner class.</li>
- *   <li>Distinguishing between known and extra properties.</li>
  * </ul>
  * 
  * <h2>Thread safety</h2>
