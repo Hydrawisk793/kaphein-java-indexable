@@ -11,22 +11,17 @@ import java.util.function.Supplier;
 import kaphein.indexable.internal.AssertArg;
 
 /**
- * <p>
- * The core interface for the {@code Indexable} contract to make target class
- * {@link IndexableComplient}.
- * </p>
+ * <p>The core interface for the {@code Indexable} contract
+ * to make target class {@link IndexableComplient}.</p>
+ *
+ * <p>This interface defines essential operations for accessing object properties by string keys,
+ * with additional type-safe access via {@link #getByDescriptor(PropertyDescriptor)}.</p>
+ *
+ * <p>Implementations <b>MUST</b> manually write {@code PropertyDescriptor} static inner class holding known properties
+ * because Java language does not support static method contracts via interfaces.</p>
  * 
- * <p>
- * This interface defines essential operations for accessing object properties
- * by string keys,
- * with additional type-safe access via
- * {@link #getByDescriptor(PropertyDescriptor)}.
- * </p>
- * 
- * <p>
- * See the {@link kaphein.indexable} package documentation for
- * detailed contract explanation and usage examples.
- * </p>
+ * <p>See the {@link kaphein.indexable} package documentation for
+ * detailed contract explanation and usage examples.</p>
  * 
  * @see kahpein.indexable
  * @see IndexableComplient
@@ -35,14 +30,44 @@ import kaphein.indexable.internal.AssertArg;
 public interface Indexable
 {
   /**
-   *  Returns {@code true} if this {@link Indexable} contains no property mappings.
+   *  <p>Returns {@code true} if this {@link Indexable} contains no property mappings.</p>
    *
    *  @return {@code true} if this {@link Indexable} contains no property mappings.
    */
   boolean isEmpty();
 
+  /**
+   *  <p>Returns {@code true} if this {@link Indexable} contains a mapping for the specified key.</p>
+   *
+   *  <p>More formally, returns {@code true} if and only if this map contains a mapping for a key {@code k}
+   *  such that {@code (null == key ? null == k : key.equals(k))}.
+   *  (There can be at most one such mapping.)</p>
+   *
+   *  @param key A key whose presence in this {@link Indexable} is to be tested.
+   *  @throws NullPointerException If the specified key is {@code null} and this {@link Indexable} does not permit {@code null} keys.
+   */
   boolean containsKey(String key);
 
+  /**
+   *  <p>Returns the value to which the specified key is mapped,
+   *  or {@code null} if this {@link Indexable} contains no mapping for the key.</p>
+   *
+   *  <p>More formally, if this {@link Indexable} contains a mapping from a key {@code k} to a value {@code v}
+   *  such that {@code (null == key ? null == k : key.equals(k))},
+   *  then this method returns {@code v}; otherwise it returns {@code null}.
+   *  (There can be at most one such mapping.)</p>
+   *
+   *  <p>If this {@link Indexable} permits {@code null} values, 
+   *  then a return value of {@code null} does not <i>necessarily</i> indicate that 
+   *  the {@link Indexable} contains no mapping for the key; 
+   *  it's also possible that the {@link Indexable} explicitly maps the key to {@code null}.
+   *  The {@link #containsKey containsKey} operation may be used to distinguish these two cases.</p>
+   *
+   *  @param key The key whose associated value is to be returned.
+   *  @return The value to which the specified key is mapped, 
+   *  or {@code null} if this {@link Indexable} contains no mapping for the key.
+   *  @throws NullPointerException If the specified key is {@code null} and this {@link Indexable} does not permit {@code null} keys.
+   */
   Object get(String key);
 
   default Object getOrDefault(
@@ -96,6 +121,7 @@ public interface Indexable
 
   /**
    *  <p>Returns an {@link Iterable} view of the keys contained in this {@link Indexable}.</p>
+   *
    *  <p>The iterable is backed by the indexable, so changes to the indexable are reflected in the iterable, and vice-versa.
    *  If the indexable is modified while an iteration over the iterable is in progress 
    *  (except through the iterator's own {@link Iterator#remove} operation), 
@@ -110,6 +136,7 @@ public interface Indexable
 
   /**
    *  <p>Returns an {@link Iterable} view of the mappings contained in this {@link Indexable}.</p>
+   *
    *  <p>The iterable is backed by the indexable, so changes to the indexable are reflected in the iterable, and vice-versa.
    *  If the indexable is modified while an iteration over the iterable is in progress 
    *  (except through the iterator's own {@link Iterator#remove} operation, 
@@ -125,6 +152,7 @@ public interface Indexable
 
   /**
    *  <p>Performs the given action for each entry in this {@link Indexable} until all entries have been processed or the action throws an exception.</p>
+   *
    *  <p>Exceptions thrown by the action are relayed to the caller.</p>
    * 
    *  @param action The action to be performed for each entry.
