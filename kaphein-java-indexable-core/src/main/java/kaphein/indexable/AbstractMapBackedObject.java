@@ -112,14 +112,14 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     @Override
     public Collection<Object> values()
     {
-      // TODO: [P1] Implement this.
+      // TODO: [P1] Implement a dedicated Values view class.
       throw new UnsupportedOperationException("Unimplemented method 'values'");
     }
 
     @Override
     public Set<Entry<String, Object>> entrySet()
     {
-      // TODO: [P1] Implement this.
+      // TODO: [P1] Implement a dedicated EntrySet view class.
       throw new UnsupportedOperationException("Unimplemented method 'values'");
     }
 
