@@ -129,24 +129,6 @@ public interface Indexable
     }
   }
 
-  /**
-   * <p>
-   * Returns a {@link Map} accessor for the {@link Indexable}. (optional)
-   * </p>
-   * 
-   * <p>
-   * Unlike {@link toMap} method, this does not create a copied {@link Map}.
-   * </p>
-   * 
-   * @return A {@link Map} accessor for the {@link Indexable}.
-   * @throws UnsupportedOperationException If the implementation does not support
-   *                                       this operation.
-   */
-  default Map<String, Object> asMap()
-  {
-    throw new UnsupportedOperationException("'asMap' is not supported.");
-  }
-
   default Indexable withEntries(
     final Collection<? extends Map.Entry<? extends String, ? extends Object>> entries
   )

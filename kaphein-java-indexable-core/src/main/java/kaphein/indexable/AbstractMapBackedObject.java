@@ -13,12 +13,10 @@ import java.util.stream.Collectors;
 import kaphein.indexable.internal.AssertArg;
 
 /**
- *  <p>A {@code java.util.Map}-backed implementation of {@link Indexable}.</p>
- * 
- *  @see Indexable
+ *  <p>An abstract class for {@link MapBackedObject} implementations.</p>
  */
 @IndexableComplient
-abstract class AbstractMapBackedObject implements Indexable
+abstract class AbstractMapBackedObject implements MapBackedObject
 {
   public static class PropertyDescriptors
   {
