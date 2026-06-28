@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.collections4.MapUtils;
 
 public final class PropertyDescriptorFactories
 {
@@ -40,10 +39,8 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Boolean.class,
-      (desc, m) -> MapUtils.getBoolean(m, mapKey),
-      (desc, m, v) -> m.put(
-        mapKey,
-        (null == v ? null : ConvertUtils.convert(v, Boolean.class))));
+      (ctx) -> (null == ctx.getValue() ? null : (Boolean)ConvertUtils.convert(ctx.getValue(), Boolean.class)),
+      (ctx) -> (null == ctx.getValue() ? null : ConvertUtils.convert(ctx.getValue(), Boolean.class)));
   }
 
   public static PropertyDescriptor<Integer> createInteger(
@@ -64,10 +61,8 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Integer.class,
-      (desc, m) -> MapUtils.getInteger(m, mapKey),
-      (desc, m, v) -> m.put(
-        mapKey,
-        (null == v ? null : ConvertUtils.convert(v, Integer.class))));
+      (ctx) -> (null == ctx.getValue() ? null : (Integer)ConvertUtils.convert(ctx.getValue(), Integer.class)),
+      (ctx) -> (null == ctx.getValue() ? null : ConvertUtils.convert(ctx.getValue(), Integer.class)));
   }
 
   public static PropertyDescriptor<Long> createLong(
@@ -88,10 +83,8 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Long.class,
-      (desc, m) -> MapUtils.getLong(m, mapKey),
-      (desc, m, v) -> m.put(
-        mapKey,
-        (null == v ? null : ConvertUtils.convert(v, Long.class))));
+      (ctx) -> (null == ctx.getValue() ? null : (Long)ConvertUtils.convert(ctx.getValue(), Long.class)),
+      (ctx) -> (null == ctx.getValue() ? null : ConvertUtils.convert(ctx.getValue(), Long.class)));
   }
 
   public static PropertyDescriptor<Double> createDouble(
@@ -112,10 +105,8 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Double.class,
-      (desc, m) -> MapUtils.getDouble(m, mapKey),
-      (desc, m, v) -> m.put(
-        mapKey,
-        (null == v ? null : ConvertUtils.convert(v, Double.class))));
+      (ctx) -> (null == ctx.getValue() ? null : (Double)ConvertUtils.convert(ctx.getValue(), Double.class)),
+      (ctx) -> (null == ctx.getValue() ? null : ConvertUtils.convert(ctx.getValue(), Double.class)));
   }
 
   public static PropertyDescriptor<String> createString(
@@ -136,10 +127,8 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       String.class,
-      (desc, m) -> MapUtils.getString(m, mapKey),
-      (desc, m, v) -> m.put(
-        mapKey,
-        (null == v ? null : ConvertUtils.convert(v, String.class))));
+      (ctx) -> (null == ctx.getValue() ? null : (String)ConvertUtils.convert(ctx.getValue(), String.class)),
+      (ctx) -> (null == ctx.getValue() ? null : ConvertUtils.convert(ctx.getValue(), String.class)));
   }
 
   public static PropertyDescriptor<Instant> createInstant(
@@ -160,9 +149,9 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       Instant.class,
-      (desc, m) -> (Instant)MapUtils.getObject(m, mapKey),
-      (desc, m, v) ->
+      (ctx) ->
       {
+        final Object v = ctx.getValue();
         Instant finalValue = null;
 
         if(null != v)
@@ -180,15 +169,16 @@ public final class PropertyDescriptorFactories
             throw new IllegalArgumentException(String.format(
               "Cannot coerce '%s' to '%s'.",
               v.getClass().getName(),
-              URI.class.getName()));
+              Instant.class.getName()));
           }
         }
 
-        if(null != finalValue)
-        {
-          m.put(mapKey, finalValue);
-        }
-      });
+        return finalValue;
+      },
+      (ctx) -> ctx.getDescriptor().getGetter().apply(new PropertyGetter.Context<>(
+        ctx.getDescriptor(),
+        ctx.getTarget(),
+        ctx.getValue())));
   }
 
   public static PropertyDescriptor<ZonedDateTime> createZonedDateTime(
@@ -209,9 +199,9 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       ZonedDateTime.class,
-      (desc, m) -> (ZonedDateTime)MapUtils.getObject(m, mapKey),
-      (desc, m, v) ->
+      (ctx) ->
       {
+        final Object v = ctx.getValue();
         ZonedDateTime finalValue = null;
 
         if(null != v)
@@ -233,11 +223,12 @@ public final class PropertyDescriptorFactories
           }
         }
 
-        if(null != finalValue)
-        {
-          m.put(mapKey, finalValue);
-        }
-      });
+        return finalValue;
+      },
+      (ctx) -> ctx.getDescriptor().getGetter().apply(new PropertyGetter.Context<>(
+        ctx.getDescriptor(),
+        ctx.getTarget(),
+        ctx.getValue())));
   }
 
   public static PropertyDescriptor<URI> createUri(
@@ -258,9 +249,9 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       URI.class,
-      (desc, m) -> (URI)MapUtils.getObject(m, mapKey),
-      (desc, m, v) ->
+      (ctx) ->
       {
+        final Object v = ctx.getValue();
         URI finalValue = null;
 
         if(null != v)
@@ -282,11 +273,12 @@ public final class PropertyDescriptorFactories
           }
         }
 
-        if(null != finalValue)
-        {
-          m.put(mapKey, finalValue);
-        }
-      });
+        return finalValue;
+      },
+      (ctx) -> ctx.getDescriptor().getGetter().apply(new PropertyGetter.Context<>(
+        ctx.getDescriptor(),
+        ctx.getTarget(),
+        ctx.getValue())));
   }
 
   public static <E> PropertyDescriptor<List<E>> createList(
@@ -339,9 +331,9 @@ public final class PropertyDescriptorFactories
             elementType.getName());
         }
       }),
-      (desc, m) -> (List<E>)(m.get(mapKey)),
-      (desc, m, v) ->
+      (ctx) ->
       {
+        final Object v = ctx.getValue();
         List<E> finalValue = null;
         if(null != v)
         {
@@ -351,7 +343,7 @@ public final class PropertyDescriptorFactories
           }
           else if(v instanceof Collection<?>)
           {
-            v = new ArrayList<>((Collection<E>)v);
+            finalValue = new ArrayList<>((Collection<E>)v);
           }
           else
           {
@@ -362,11 +354,12 @@ public final class PropertyDescriptorFactories
           }
         }
 
-        if(null != finalValue)
-        {
-          m.put(mapKey, finalValue);
-        }
-      });
+        return finalValue;
+      },
+      (ctx) -> ctx.getDescriptor().getGetter().apply(new PropertyGetter.Context<>(
+        ctx.getDescriptor(),
+        ctx.getTarget(),
+        ctx.getValue())));
   }
 
   public static <E> PropertyDescriptor<Set<E>> createSet(
@@ -419,9 +412,9 @@ public final class PropertyDescriptorFactories
             elementType.getName());
         }
       }),
-      (desc, m) -> (Set<E>)(m.get(mapKey)),
-      (desc, m, v) ->
+      (ctx) ->
       {
+        final Object v = ctx.getValue();
         Set<E> finalValue = null;
         if(null != v)
         {
@@ -431,7 +424,7 @@ public final class PropertyDescriptorFactories
           }
           else if(v instanceof Collection<?>)
           {
-            v = new LinkedHashSet<>((Collection<E>)v);
+            finalValue = new LinkedHashSet<>((Collection<E>)v);
           }
           else
           {
@@ -442,11 +435,12 @@ public final class PropertyDescriptorFactories
           }
         }
 
-        if(null != finalValue)
-        {
-          m.put(mapKey, finalValue);
-        }
-      });
+        return finalValue;
+      },
+      (ctx) -> ctx.getDescriptor().getGetter().apply(new PropertyGetter.Context<>(
+        ctx.getDescriptor(),
+        ctx.getTarget(),
+        ctx.getValue())));
   }
 
   public static PropertyDescriptor<Map<String, Object>> createStringObjectMap(
@@ -497,8 +491,8 @@ public final class PropertyDescriptorFactories
             Object.class.getName());
         }
       }),
-      (desc, m) -> (Map<String, Object>)MapUtils.getMap(m, mapKey),
-      (desc, m, v) -> m.put(mapKey, (Map<String, Object>)v));
+      (ctx) -> (Map<String, Object>)ctx.getValue(),
+      (ctx) -> (Map<String, Object>)ctx.getValue());
   }
 
   public static PropertyDescriptor<Map<String, String>> createStringStringMap(
@@ -549,8 +543,8 @@ public final class PropertyDescriptorFactories
             Object.class.getName());
         }
       }),
-      (desc, m) -> (Map<String, String>)MapUtils.getMap(m, mapKey),
-      (desc, m, v) -> m.put(mapKey, (Map<String, String>)v));
+      (ctx) -> (Map<String, String>)ctx.getValue(),
+      (ctx) -> (Map<String, String>)ctx.getValue());
   }
 
   public static <T> PropertyDescriptor<T> createSimple(
@@ -575,9 +569,11 @@ public final class PropertyDescriptorFactories
       mapKey,
       propName,
       type,
-      (desc, m) -> ((Class<T>)desc.getType()).cast(m.get(mapKey)),
-      (desc, m, v) -> m.put(
-        mapKey,
-        (null == v ? null : ((Class<T>)desc.getType()).cast((v)))));
+      (ctx) -> (null == ctx.getValue()
+        ? null
+        : ((Class<T>)ctx.getDescriptor().getType()).cast(ctx.getValue())),
+      (ctx) -> (null == ctx.getValue()
+        ? null
+        : ((Class<T>)ctx.getDescriptor().getType()).cast(ctx.getValue())));
   }
 }

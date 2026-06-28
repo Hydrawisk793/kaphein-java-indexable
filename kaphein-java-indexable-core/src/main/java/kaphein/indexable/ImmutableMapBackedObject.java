@@ -73,7 +73,7 @@ public class ImmutableMapBackedObject extends AbstractMapBackedObject
   }
 
   @Override
-  public Object put(final String key, final Object value)
+  public void put(final String key, final Object value)
   {
     throw new UnsupportedOperationException("'put' is not supported.");
   }

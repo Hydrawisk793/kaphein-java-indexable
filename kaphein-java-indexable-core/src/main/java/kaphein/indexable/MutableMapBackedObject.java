@@ -73,9 +73,9 @@ public class MutableMapBackedObject extends AbstractMapBackedObject
   }
 
   @Override
-  public Object put(final String key, final Object value)
+  public void put(final String key, final Object value)
   {
-    return doPut(key, value);
+    doPut(key, value);
   }
 
   @Override

@@ -37,7 +37,7 @@ public interface Indexable
   /**
    *  <p>Returns {@code true} if this {@link Indexable} contains a mapping for the specified key.</p>
    *
-   *  <p>Returns {@code true} if and only if this map contains a mapping for a key {@code k}
+   *  <p>Returns {@code true} if and only if this {@link Indexable} contains a mapping for a key {@code k}
    *  such that {@code (null == key ? null == k : key.equals(k))}.
    *  (There can be at most one such mapping.)</p>
    *
@@ -129,23 +129,18 @@ public interface Indexable
   /**
    *  <p>Associates the specified value with the specified key in this {@link Indexable}. (optional operation)</p>
    *
-   *  <p>If the map previously contained a mapping for the key,
+   *  <p>If the {@link Indexable} previously contained a mapping for the key,
    *  the old value is replaced by the specified value.
    *  (An {@link Indexable} {@code x} is said to contain a mapping for a key {@code k}
    *  if and only if {@link #containsKey(Object) x.containsKey(k)} would return {@code true}.)</p>
    *
    *  @param key A key with which the specified value is to be associated.
    *  @param value A value to be associated with the specified key.
-   *  @return The previous value associated with {@code key} or {@code null} if:
-   *  <ul>
-   *    <li>There was no mapping for {@code null}.</li>
-   *    <li>The {@link Indexable} previously associated {@code null} with {@code key}, if the implementation supports {@code key} values.</li>
-   *  </ul>
    *  @throws UnsupportedOperationException If the {@code put} operation is not supported by this {@link Indexable}.
    *  @throws NullPointerException If the specified key or value is {@code null} and this {@link Indexable} does not permit {@code null} keys or values.
    *  @throws IllegalArgumentException If some property of the specified key or value prevents it from being stored in this {@link Indexable}.
    */
-  default Object put(
+  default void put(
     final String key,
     final Object value
   )
@@ -176,7 +171,7 @@ public interface Indexable
    *  <p>Copies all of the specified mappings to this {@link Indexable}. (optional operation)</p>
    * 
    *  <p>The effect of this call is equivalent to that of calling {@link #put(Object,Object) put(k, v)} on this {@link Indexable}
-   *  once for each mapping from key {@code k} to value {@code v} in the specified map.
+   *  once for each mapping from key {@code k} to value {@code v} in the specified entries.
    *  The behavior of this operation is undefined if the specified {@code entries} is modified while the operation is in progress.</p>
    *
    *  @param entries A collection of mappings to be stored in this {@link Indexable}.

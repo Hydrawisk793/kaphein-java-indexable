@@ -223,7 +223,11 @@ class MapBackedObjectMapView implements Map<String, Object>
   @Override
   public Object put(final String key, final Object value)
   {
-    return owner.put(key, value);
+    final Object oldValue = owner.get(key);
+
+    owner.put(key, value);
+
+    return oldValue;
   }
 
   @Override

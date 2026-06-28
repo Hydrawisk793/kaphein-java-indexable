@@ -93,19 +93,25 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   {
     AssertArg.isNotNull(key, "key");
 
-    Object value = null;
+    Object result = null;
+
+    final Object value = propMap.get(key);
+
     @SuppressWarnings("unchecked")
     final PropertyDescriptor<Object> desc = (PropertyDescriptor<Object>)descMap.get(key);
     if(null == desc)
     {
-      value = propMap.get(key);
+      result = value;
     }
     else
     {
-      value = desc.getGetter().apply(desc, propMap);
+      result = desc.getGetter().apply(new PropertyGetter.Context<>(
+        desc,
+        this,
+        value));
     }
 
-    return value;
+    return result;
   }
 
   @Override
@@ -115,7 +121,12 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   {
     AssertArg.isNotNull(desc, "desc");
 
-    return desc.getGetter().apply(desc, propMap);
+    final Object value = propMap.get(desc.getIndexKey());
+
+    return desc.getGetter().apply(new PropertyGetter.Context<>(
+      desc,
+      this,
+      value));
   }
 
   @Override
@@ -182,25 +193,26 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     return m;
   }
 
-  protected Object doPut(final String key, final Object value)
+  protected void doPut(final String key, final Object value)
   {
     AssertArg.isNotBlank(key, "key");
 
-    Object oldValue = null;
+    Object newValue = null;
     @SuppressWarnings("unchecked")
     final PropertyDescriptor<Object> desc = (PropertyDescriptor<Object>)descMap.get(key);
     if(null == desc)
     {
-      oldValue = propMap.put(key, value);
+      newValue = value;
     }
     else
     {
-      oldValue = get(key);
-
-      desc.getSetter().apply(desc, propMap, value);
+      newValue = desc.getSetter().apply(new PropertySetter.Context<>(
+        desc,
+        this,
+        value));
     }
 
-    return oldValue;
+    propMap.put(key, newValue);
   }
 
   protected Object doRemove(final String key)
