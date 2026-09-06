@@ -180,19 +180,6 @@ abstract class AbstractMapBackedObject implements MapBackedObject
     return result;
   }
 
-  @Override
-  public Map<String, Object> toMap(
-    final Supplier<Map<String, Object>> mapSupplier
-  )
-  {
-    final Map<String, Object> m = AssertArg
-      .isNotNull(mapSupplier, "mapSupplier")
-      .get();
-    m.putAll(propMap);
-
-    return m;
-  }
-
   protected void doPut(final String key, final Object value)
   {
     AssertArg.isNotBlank(key, "key");

@@ -330,5 +330,19 @@ public interface Indexable
    *  @param mapSupplier A supplier for {@link java.util.Map} instance where the property pairs returned in.
    *  @return An {@link java.util.Map} instance with all property mappings.
    */
-  Map<String, Object> toMap(Supplier<Map<String, Object>> mapSupplier);
+  default Map<String, Object> toMap(
+    final Supplier<Map<String, Object>> mapSupplier
+  )
+  {
+    final Map<String, Object> m = AssertArg
+      .isNotNull(mapSupplier, "mapSupplier")
+      .get();
+
+    for(final String key : keys())
+    {
+      m.put(key, get(key));
+    }
+
+    return m;
+  }
 }
