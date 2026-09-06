@@ -28,6 +28,14 @@ import kaphein.indexable.internal.AssertArg;
 public interface Indexable
 {
   /**
+   *  <p>Returns {@code true} if this {@link Indexable} contains a {@link PropertyDescriptor} for the specified key.</p>
+   *
+   *  @param key A key to be tested.
+   *  @return {@code true} if this {@link Indexable} contains a {@link PropertyDescriptor} for the specified key.
+   */
+  boolean hasDescriptorFor(String key);
+
+  /**
    *  <p>Returns {@code true} if this {@link Indexable} contains no property mappings.</p>
    *
    *  @return {@code true} if this {@link Indexable} contains no property mappings.
@@ -116,15 +124,6 @@ public interface Indexable
    *  @throws IllegalArgumentException If the specified {@code desc} is {@code null}.
    */
   <T> T getByDescriptor(PropertyDescriptor<T> desc);
-
-  /**
-   *  <p>Returns an {@link Iterable} of extra property mappings of this {@link Indexable}.</p>
-   *
-   *  <p>Extra property mappings are key-value mappings of properties that is not declared in the {@code PropertyDescriptors} static inner class.</p>
-   *
-   *  @return An {@link Iterable} of extra property mappings of this {@link Indexable}.
-   */
-  Iterable<Map.Entry<String, Object>> getExtraProperties();
 
   /**
    *  <p>Associates the specified value with the specified key in this {@link Indexable}. (optional operation)</p>
@@ -245,6 +244,24 @@ public interface Indexable
    *  @return An {@link Iterable} view of the keys contained in this {@link Indexable}.
    */
   Iterable<String> keys();
+
+  /**
+   *  <p>Returns an {@link Iterable} view of the extra property keys contained in this {@link Indexable}.</p>
+   *
+   *  <p>The iterable is backed by the indexable, so changes to the indexable are reflected in the iterable, and vice-versa.
+   *  If the indexable is modified while an iteration over the iterable is in progress 
+   *  (except through the iterator's own {@link Iterator#remove} operation), 
+   *  the results of the iteration are undefined.
+   *  The iterable MAY support element removal, which removes the corresponding mapping from the indexable, 
+   *  via the {@link Iterator#remove} operation.
+   *  It <b>DOES NOT</b> support adding elements into the indexable.</p>
+   *
+   *  @return An {@link Iterable} view of the extra property keys contained in this {@link Indexable}.
+   */
+  default Iterable<String> extraPropertyKeys()
+  {
+    return new IndexableExtraPropertyKeysView(this);
+  }
 
   /**
    *  <p>Returns an {@link Iterable} view of the mappings contained in this {@link Indexable}.</p>

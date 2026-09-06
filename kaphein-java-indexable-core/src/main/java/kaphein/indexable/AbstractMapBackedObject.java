@@ -1,11 +1,8 @@
 package kaphein.indexable;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -77,6 +74,12 @@ abstract class AbstractMapBackedObject implements MapBackedObject
   }
 
   @Override
+  public boolean hasDescriptorFor(final String key)
+  {
+    return descMap.containsKey(key);
+  }
+
+  @Override
   public boolean isEmpty()
   {
     return propMap.isEmpty();
@@ -127,21 +130,6 @@ abstract class AbstractMapBackedObject implements MapBackedObject
       desc,
       this,
       value));
-  }
-
-  @Override
-  public List<Map.Entry<String, Object>> getExtraProperties()
-  {
-    final List<Map.Entry<String, Object>> extraProps = new ArrayList<>();
-    for(final String key : keys())
-    {
-      if(!descMap.containsKey(key))
-      {
-        extraProps.add(new AbstractMap.SimpleImmutableEntry<>(key, propMap.get(key)));
-      }
-    }
-
-    return extraProps;
   }
 
   @Override
